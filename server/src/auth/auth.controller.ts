@@ -8,28 +8,28 @@ import { RegisterDto } from './dto/register.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post()
-  create(@Body() createAuthDto: RegisterDto) {
-    return this.authService.create(createAuthDto);
+  @Post('login')
+  async login(@Body() createAuthDto: LoginDto)
+   {
+    const res = await this.authService.login(createAuthDto);
+    return {res};
   }
 
-  @Get()
-  findAll() {
-    return this.authService.findAll();
+  @Post('register')
+  async register(@Body() createAuthDto: RegisterDto) {
+  const res =   await this.authService.register(createAuthDto);
+    return res
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authService.findOne(+id);
-  }
+ 
 
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
   //   return this.authService.update(+id, updateAuthDto);
   // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.authService.remove(+id);
+  // }
 }

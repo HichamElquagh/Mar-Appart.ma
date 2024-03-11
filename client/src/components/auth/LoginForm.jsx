@@ -23,6 +23,7 @@ const LoginForm = () => {
   <div className="flex justify-center ">
         <img src={logo} alt="logo" className="w-40 h-40" />
     </div>
+    <i class="fi fi-rr-arrow-left size-36 text-gray-700"></i>
   <h1 className="text-xl md:text-2xl font-bold leading-tight mt-12">Log in to your account</h1>
 
     <form className="mt-6" action="#" method="POST">
@@ -60,7 +61,6 @@ const LoginForm = () => {
     <p className="mt-8">Need an account? <a href="#" className="text-blue-500 hover:text-blue-700 font-semibold">Create an
             account</a></p>
 
-
   </div>
 </div>
 
@@ -70,3 +70,4 @@ const LoginForm = () => {
     }
 
     export default LoginForm;
+    

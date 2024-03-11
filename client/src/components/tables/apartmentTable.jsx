@@ -1,7 +1,19 @@
+import ApartmentModal from "../modals/ApartmentModal";
+import DashCard from "../myn/DashCard";
+// import { Button } from "@/components/ui/button"
+// import {
+//   Dialog,
+//   DialogTrigger,
+// } from "@/components/ui/dialog"
+
+
+
 export default function ApartmentsTable () {
     return (
     
     <>
+
+    <DashCard/>
         {/* // <!-- Table Section --> */}
         <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
           {/* <!-- Card --> */}
@@ -22,16 +34,7 @@ export default function ApartmentsTable () {
         
                     <div>
                       <div class="inline-flex gap-x-2">
-                        <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
-                          View all
-                        </a>
-        
-                        <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
-                          <svg class="flex-shrink-0 size-3" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                            <path d="M2.63452 7.50001L13.6345 7.5M8.13452 13V2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                          </svg>
-                          Add Apartment
-                        </a>
+                      <ApartmentModal/>
                       </div>
                     </div>
                   </div>

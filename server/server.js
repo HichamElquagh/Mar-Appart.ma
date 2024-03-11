@@ -1,10 +1,22 @@
 const express = require('express');
 const path = require('path');
 const authRouter = require('./routes/auth/auth.router');
+const apartmentRouter = require('./routes/apartment/apartment.router');
 const dotenv = require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const app = express();
 const cors = require('cors')
+const multer = require('multer');
+
+
+const cloudinary = require('cloudinary').v2;
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET
+});
+
+const upload = multer({ dest: 'uploads/' }); // Optional: Set a temporary storage directory
 
 // Set up the express app to handle data parsing
 const connectDatabase = require('./config/db');
@@ -30,6 +42,7 @@ app.use((err, req, res, next) => {
 });
 
 app.use('/auth', authRouter);
+app.use('/apartments', apartmentRouter );
 // Start the server
 const port = process.env.PORT || 3000; // Use environment variable or default port 3000
 app.listen(port, () => {

@@ -10,7 +10,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@cloudinary/react": "^1.13.0",
+    "@cloudinary/url-gen": "^1.19.0",
+    "@flaticon/flaticon-uicons": "^3.1.0",
+    "@fullcalendar/core": "^6.1.11",
+    "@fullcalendar/daygrid": "^6.1.11",
+    "@fullcalendar/react": "^6.1.11",
     "@reduxjs/toolkit": "^2.2.1",
+    "cloudinary": "^2.0.3",
+    "cloudinary-core": "^2.13.0",
+    "cloudinary-react": "^1.8.1",
     "formik": "^2.4.5",
     "preline": "^2.0.3",
     "react": "^18.2.0",

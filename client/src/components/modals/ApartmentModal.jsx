@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useCreateApartmentMutation } from '../../store/api/apartmentQuery';
+import { useCreateApartmentMutation , useUpdateApartmentMutation  } from '../../store/api/apartmentQuery';
 import axios from 'axios';
-import './styles.css';
+// import './styles.css';
+import { useNavigate } from 'react-router';
+import toast from 'react-hot-toast';
 const ApartmentModal = ( {
   showModal,
   setShowModal,
@@ -13,6 +15,7 @@ const ApartmentModal = ( {
 
 
   const [AddApartment, { isLoading, isError, error }] = useCreateApartmentMutation();
+  const [UpdateApartment, { isLoading: isUpdateLoading, isError: isUpdateError, updateError }] = useUpdateApartmentMutation();
 
   const availableCharacteristics = [
     { id: 1, value: 'balcony', label: 'Balcony' },
@@ -157,36 +160,43 @@ const ApartmentModal = ( {
       // Reset form after successful submission
       if (response.apartment) {
       resetForm();
-      setShowModal(false);}
+      setShowModal(false);    
+    }
     } catch (error) {
       console.error('Submission failed:', error);
       // Handle submission errors (display error messages, etc.)
     }
   };
+
   const handleUpdate = async (e) => {
-    
-    e.preventDefault();
-    if (!validate()) {
-      return;
-    }
-    const urls = await handleImageSubmit();
-    console.log('Image URLs:', urls);
+    // if(apartmentData.images.length === 0) {     
+
+    // }
+    // if (!validate()) {
+    //   return;
+    // }
+    // const urls = await handleImageSubmit();
+    // console.log('Image URLs:', urls);
     try {
-      const obj = {
-        ...apartmentData,
-        images: urls,
-      };
+      // const obj = {
+      //   ...apartmentData,
+      //   images: urls,
+      // };
+      const response = await UpdateApartment({id: apartmentToUpdate._id, ...apartmentData}).unwrap();
+      console.log('Apartment data:', response);
       // Logic to send form data to your API
-      console.log('Apartment data:', obj);
       // Reset form after successful submission
+      if (response) {
       resetForm();
-      setShowModal(false);
-      setShowModalForUpdate(false);
+      setShowModal(false);    
+      toast.success('Apartment updated successfully');
+    }
     } catch (error) {
       console.error('Submission failed:', error);
       // Handle submission errors (display error messages, etc.)
     }
   }
+
 
 
 
@@ -200,7 +210,7 @@ const ApartmentModal = ( {
 
                 >
                   <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
-                   {showModalForUpdate ? (
+                   { showModalForUpdate ? (
                       <h3 className="text-2xl font-semibold">
                         UPDATE APARTMENT
                       </h3>
@@ -235,6 +245,7 @@ const ApartmentModal = ( {
                           </label>
                           {errors.name && <span className="text-red-600 text-xs">{errors.name}</span>}
                         </div>
+                       { !showModalForUpdate && 
                         <div className="relative h-auto w-full min-w-[200px]">
                           <input
                             className="peer h-full w-full rounded-md border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-600 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
@@ -247,7 +258,7 @@ const ApartmentModal = ( {
                           <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[4.1] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-gray-600 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:!border-gray-600 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:!border-gray-600 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
                             Images
                           </label>
-                        </div>
+                        </div> }
                         {errors.images && <span className="text-red-600 text-xs">{errors.images}</span>}
                         <div className="relative h-11 w-full min-w-[200px]">
                           <input
@@ -279,6 +290,7 @@ const ApartmentModal = ( {
                         {/* Price */}
                         <div className="relative h-11 w-full min-w-[200px]">
                           <input
+                            type='number'
                             className="peer h-full w-full rounded-md border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-600 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
                             placeholder=" "
                             value={apartmentData.price}
@@ -306,21 +318,31 @@ const ApartmentModal = ( {
                         </div>
                         {/* Number of Persons */}
                         <div className="relative h-11 w-full min-w-[200px]">
-                          <input
+                          <select
                             className="peer h-full w-full rounded-md border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-600 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
-                            placeholder=" "
                             value={apartmentData.numberOfPersons}
                             name="numberOfPersons"
                             onChange={handleChange}
-                          />
-                          <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[4.1] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-gray-600 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:!border-gray-600 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:!border-gray-600 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
+                          >
+                            <option value=""> </option> {/* Empty option for placeholder */}
+                            {Array.from({ length: 6 }, (_, i) => i + 1).map((optionValue) => (
+                              <option key={optionValue} value={optionValue}>
+                                {optionValue}
+                              </option>
+                            ))}
+                          </select>
+                          <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r before:border-blue-gray-200 before:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[4.1] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-gray-600 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:!border-gray-600 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:!border-gray-600 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
                             Number of Persons
                           </label>
-                          {errors.numberOfPersons && <span className="text-red-600 text-xs">{errors.numberOfPersons}</span>}
+                          {errors.numberOfPersons && (
+                            <span className="text-red-600 text-xs">{errors.numberOfPersons}</span>
+                          )}
                         </div>
+
                         {/* Space */}
                         <div className="relative h-11 w-full min-w-[200px]">
                           <input
+                           type='number'
                             className="peer h-full w-full rounded-md border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-600 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
                             placeholder=" "
                             value={apartmentData.space}
@@ -339,6 +361,7 @@ const ApartmentModal = ( {
                             multiple
                             onChange={handleOptionChange}
                             name="characteristics"
+                            value={apartmentData.characteristics}
                           >
                             {availableCharacteristics.map((characteristic) => (
                               <option key={characteristic.id} value={characteristic.value}>

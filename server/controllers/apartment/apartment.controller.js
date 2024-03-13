@@ -84,7 +84,6 @@ const Apartment = require('../../models/apartment')
                  numberOfPersons,
                  space,
                  characteristics,
-                 owner
              });
              if (!apartment) {
                  return res.status(404).json({ error: 'Apartment not found.' });

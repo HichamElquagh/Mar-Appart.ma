@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { useState , useEffect } from "react";
 import ApartmentModal from "../modals/ApartmentModal";
 import DashCard from "../myn/DashCard";
-import { useGetApartmentsQuery } from "../../store/api/apartmentQuery";
+import { useGetApartmentsQuery , useDeleteApartmentMutation } from "../../store/api/apartmentQuery";
+import { RiDeleteBinLine } from "react-icons/ri";
+import toast, { Toaster } from 'react-hot-toast';
+
+
 
 
 export default function ApartmentsTable () {
@@ -13,15 +17,28 @@ export default function ApartmentsTable () {
     setApartmentToUpdate(apartment);
     setShowModal(true);
   }
+  const { data: apartments, error, isLoading, refetch } = useGetApartmentsQuery();
+  useEffect(() => { 
+    refetch();
+  }, [showModal, showModalForUpdate]);
 
-  const { data: apartments, error, isLoading } = useGetApartmentsQuery();
+  const [deleteApartment] = useDeleteApartmentMutation();
   console.log(apartments)
   if (isLoading) return 'Loading...';
   if (error) return `Error! ${error.message}`;
 
-  // const handleDelete = (id) => {
-  //   console.log(id);
-  // }
+
+const handleDelete = async (id) => {
+   
+    const result = await deleteApartment(id);
+    if (result.data) {
+      toast.success('Apartment deleted successfully');
+      refetch();
+    } else {
+      toast.error('Apartment not deleted');
+    }
+  
+}
 
   
   return (  
@@ -119,6 +136,20 @@ export default function ApartmentsTable () {
                             </span>
                           </div>
                         </th>
+                        <th scope="col" class="px-6 py-3 text-start">
+                          <div class="flex items-center gap-x-2">
+                            <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
+                              Details
+                            </span>
+                          </div>
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-start">
+                          <div class="flex items-center gap-x-2">
+                            <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
+                              
+                            </span>
+                          </div>
+                        </th>
                       </tr>
                     </thead>
 
@@ -180,6 +211,15 @@ export default function ApartmentsTable () {
                             onClick={() => handleUpdate(apartment)}
                             class="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
                               Edit
+                            </button>
+                          </div>
+                        </td>
+                        <td class="size-px whitespace-nowrap">
+                          <div class="px-6 py-1.5">
+                            <button
+                            onClick={() => handleDelete(apartment._id)}
+                            class="inline-flex items-center gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                              <RiDeleteBinLine />
                             </button>
                           </div>
                         </td>

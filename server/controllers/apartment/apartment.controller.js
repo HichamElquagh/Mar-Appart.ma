@@ -32,8 +32,13 @@ const Apartment = require('../../models/apartment')
                  owner : '60f3e3e3e3e3e3e3e3e3e3e3',
              });
              await newApartment.save();
-             res.status(201).json({ message: 'Apartment created successfully.',
-                                    apartment: newApartment});
+             if (!newApartment) {
+                 return res.status(400).json({ error: 'Apartment not created.' });
+             }else{
+                 res.status(201).json({ message: 'Apartment created successfully.',
+                                        apartment: newApartment});
+
+             }
          } catch (error) {
              console.error(error);
              res.status(500).json({ error: error.message });

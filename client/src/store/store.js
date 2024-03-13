@@ -8,9 +8,10 @@ const store = configureStore({
         [apartmentApi.reducerPath]: apartmentApi.reducer,
      },
      middleware: (getDefaultMiddleware) =>
-     getDefaultMiddleware().concat(authApi.middleware),
+     getDefaultMiddleware().concat(authApi.middleware,apartmentApi.middleware),
      
-
+      
+    
  })
 
 export default store

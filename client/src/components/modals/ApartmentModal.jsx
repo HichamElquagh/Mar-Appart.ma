@@ -1,9 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { useCreateApartmentMutation } from '../../store/api/apartmentQuery';
 import axios from 'axios';
-const ApartmentModal = () => {
+import './styles.css';
+const ApartmentModal = ( {
+  showModal,
+  setShowModal,
+  apartmentToUpdate,
+  showModalForUpdate,
+  setShowModalForUpdate,
+} ) => {
  
-  const [imagepath, setImagePath] = useState([]);
+
+
+  const [AddApartment, { isLoading, isError, error }] = useCreateApartmentMutation();
+
+  const availableCharacteristics = [
+    { id: 1, value: 'balcony', label: 'Balcony' },
+    { id: 2, value: 'garden', label: 'Garden' },
+    { id: 3, value: 'pool', label: 'Pool' },
+    { id: 4, value: 'garage', label: 'Garage' },
+    { id: 5, value: 'gym', label: 'Gym' },
+    { id: 6, value: 'security', label: 'Security' },
+  ];
   const [apartmentData, setApartmentData] = useState({
     name: '',
     images: [],
@@ -14,32 +32,54 @@ const ApartmentModal = () => {
     numberOfPersons: '',
     space: '',
     characteristics: [],
+  });
+  const [imagePath, setImagePath] = useState([]);
+  const [errors, setErrors] = useState({});
+
+  const resetForm = () => {
+    setApartmentData({
+      name: '',
+      images: [],
+      city: '',
+      address: '',
+      price: '',
+      description: '',
+      numberOfPersons: '',
+      space: '',
+      characteristics: [],
     });
+    setErrors({});
+  };
+  useEffect(() => {
+    if (showModalForUpdate) {
+      setApartmentData(apartmentToUpdate);
+    }
+  }, [showModalForUpdate, apartmentToUpdate]);
 
-    const [errors , setErrors] = useState({});
-    const [AddApartment, { isLoading, isError, error }] = useCreateApartmentMutation();
+  const handleCloseModal = () => {
+    setShowModal(false);
+    if (showModalForUpdate) {
+      setShowModalForUpdate(false);
+    }
+    resetForm();
+  };
 
-    const validate = () => {
-      const newErrors = {};
-      if (!apartmentData.name) newErrors.name = 'Name is required';
-      if (!apartmentData.images.length === 0) newErrors.images = 'Image is required';
-      if (!apartmentData.city) newErrors.city = 'City is required';
-      if (!apartmentData.address) newErrors.address = 'Address is required';
-      if (!apartmentData.price) newErrors.price = 'Price is required';
-      if (!apartmentData.description) newErrors.description = 'Description is required';
-      if (!apartmentData.numberOfPersons) newErrors.numberOfPersons = 'Number of persons is required';
-      if (!apartmentData.space) newErrors.space = 'Space is required';
-      if (apartmentData.characteristics.length === 0 ) newErrors.characteristics = 'Characteristics is required';
+  const validate = () => {
+    const newErrors = {};
+    if (!apartmentData.name) newErrors.name = 'Name is required';
+    if (imagePath.length === 0) newErrors.images = 'Image is required';
+    if (!apartmentData.city) newErrors.city = 'City is required';
+    if (!apartmentData.address) newErrors.address = 'Address is required';
+    if (!apartmentData.price) newErrors.price = 'Price is required';
+    if (!apartmentData.description) newErrors.description = 'Description is required';
+    if (!apartmentData.numberOfPersons) newErrors.numberOfPersons = 'Number of persons is required';
+    if (!apartmentData.space) newErrors.space = 'Space is required';
+    if (apartmentData.characteristics.length === 0) newErrors.characteristics = 'Characteristics is required';
 
-      setErrors(newErrors);
+    setErrors(newErrors);
 
     return Object.keys(newErrors).length === 0;
-
-    };
-
-    
-
-    
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -54,7 +94,7 @@ const ApartmentModal = () => {
     const selectedValues = Array.from(options)
       .filter((option) => option.selected)
       .map((option) => option.value);
-  
+
     setApartmentData((prevData) => ({
       ...prevData,
       [name]: selectedValues,
@@ -62,270 +102,286 @@ const ApartmentModal = () => {
   };
 
   const handleImageChange = (e) => {
-    const { name, files } = e.target;
-    if (!files) return; // Handle no files selected (optional)
+    const { files } = e.target;
+    if (!files) return;
 
-    // console.log(name, files);
-     // Convert the FileList object to an array
-  const filesArray = Array.from(files);
+    const filesArray = Array.from(files);
     setImagePath(filesArray);
-    // console.log(imagepath);
   };
 
+  const handleImageSubmit = async () => {
+    const cloudinaryPreset = 'y2xzakhz'; // Replace with your preset name
+    const cloudinaryUrl = `https://api.cloudinary.com/v1_1/dbexsjmb3/image/upload`;
 
-const handleImageSubmit = async () => {
-  const cloudinaryPreset = 'y2xzakhz'; // Replace with your preset name
-  const cloudinaryUrl = `https://api.cloudinary.com/v1_1/dbexsjmb3/image/upload`; // Cloudinary API endpoint
+    const formData = new FormData();
+    formData.append('upload_preset', cloudinaryPreset);
 
-  const formData = new FormData();
-  formData.append('upload_preset', cloudinaryPreset);
+    const uploadPromises = imagePath.map((image) => {
+      formData.append('file', image);
 
-  const uploadPromises = imagepath.map((image) => {
-    formData.append('file', image); // Add each image to the form data
+      return axios.post(cloudinaryUrl, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+    });
 
-  return axios.post(cloudinaryUrl, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data', // Set content type for multipart form data
-      },
-    }); 
-  });
-
-  try {
-    const responses = await Promise.all(uploadPromises);
-    const uploadedImageUrls =  responses.map((response) => response.data.secure_url);
-    return uploadedImageUrls;
-    
+    try {
+      const responses = await Promise.all(uploadPromises);
+      const uploadedImageUrls = responses.map((response) => response.data.secure_url);
+      return uploadedImageUrls;
     } catch (error) {
-    console.error('Upload failed:', error);
-    // Handle upload errors (display error messages, etc.)
-  }
-
-}
-
-
+      console.error('Upload failed:', error);
+      // Handle upload errors (display error messages, etc.)
+    }
+  };
 
   const handleSubmit = async (e) => {
+    console.log('Apartment data:');
+    console.log(apartmentData);
+    // e.preventDefault();
+    if (!validate()) {
+      return;
+    }
+    const urls = await handleImageSubmit();
+    console.log('Image URLs:', urls);
+    try {
+      const obj = {
+        ...apartmentData,
+        images: urls,
+      };
+      const response = await AddApartment(obj).unwrap();
+      console.log('Apartment data:', response);
+      // Logic to send form data to your API
+      console.log('Apartment data:', obj);
+      // Reset form after successful submission
+      if (response.apartment) {
+      resetForm();
+      setShowModal(false);}
+    } catch (error) {
+      console.error('Submission failed:', error);
+      // Handle submission errors (display error messages, etc.)
+    }
+  };
+  const handleUpdate = async (e) => {
+    
     e.preventDefault();
     if (!validate()) {
       return;
     }
     const urls = await handleImageSubmit();
+    console.log('Image URLs:', urls);
+    try {
+      const obj = {
+        ...apartmentData,
+        images: urls,
+      };
+      // Logic to send form data to your API
+      console.log('Apartment data:', obj);
+      // Reset form after successful submission
+      resetForm();
+      setShowModal(false);
+      setShowModalForUpdate(false);
+    } catch (error) {
+      console.error('Submission failed:', error);
+      // Handle submission errors (display error messages, etc.)
+    }
+  }
 
-      try {
-        console.log(apartmentData);
-        const obj = {
-          ...apartmentData,
-          images: urls
-        }
-        console.log('object ' , obj);
-        const apartmentResponse = await AddApartment(obj);
-        console.log('Aparntment added', apartmentResponse.data);
-      } catch (error) {
-        console.error('Upload failed:', error);
-        // Handle upload errors (display error messages, etc.)
-      }
-  
-  };
+
 
   return (
     <>
-      {/* Button to open the modal */}
-      <button
-        type="button"
-        className="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-        data-hs-overlay="#hs-focus-management-modal"
-      >
-        Open modal
-      </button>
+      {showModal ? (
+          <>
+            <div className="justify-center bg-black bg-opacity-80 h-full items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none  ">
+              <div className="relative w-auto my-6 mx-auto max-w-3xl">
+                <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none max-h-[90vh] overflow-y-scroll"
 
-      {/* Modal */}
-      <div
-        id="hs-focus-management-modal"
-        className="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none"
-      >
-        <div className="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto">
-          <div className="flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-gray-800 dark:border-gray-700 dark:shadow-slate-700/[.7]">
-            <div className="flex justify-between items-center py-3 px-4 border-b dark:border-gray-700">
-              <h3 className="font-bold text-gray-800 dark:text-white">Modal title</h3>
-              <button
-                type="button"
-                className="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-gray-700 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                data-hs-overlay="#hs-focus-management-modal"
-              >
-                <span className="sr-only">Close</span>
-                <svg
-                  className="flex-shrink-0 size-4"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
                 >
-                  <path d="M18 6 6 18" />
-                  <path d="m6 6 12 12" />
-                </svg>
-              </button>
-            </div>
-            <div className="p-4 overflow-y-auto">
-              {/* Generate input fields based on the schema */}
-              {Object.entries(apartmentData).map(([key, value]) => (
-                  key === 'images' ? (
-                    <div key={key} className="mb-4">
-                      <label htmlFor={key} className="block text-sm font-medium mb-2 dark:text-white">
-                        {key.charAt(0).toUpperCase() + key.slice(1)}
-                      </label>
-                      <input
-                        type="file"
-                        accept=' image/*'
-                        id={key}
-                        name= {imagepath}
-                        multiple={true}
-                        onChange={handleImageChange}
-                        className="block w-full border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600
-                        file:bg-gray-50 file:border-0
-                        file:me-4
-                        file:py-3 file:px-4 file:sm:py-5
-                        dark:file:bg-gray-700 dark:file:text-gray-400"
-                      />
-                        {errors.image && <p className="text-red-500 text-sm">{errors.image}</p>}
-                    </div>
-                  ) :
-                  key === 'characteristics' ? (
-                    <div key={key} className="mb-4">
-                      <label htmlFor={key} className="block text-sm font-medium mb-2 dark:text-white">
-                        {key.charAt(0).toUpperCase() + key.slice(1)}
-                      </label>
-                      <select
-                        id={key}
-                        name={key}
-                        value={value}
-                        onChange={handleOptionChange}
-                        multiple={true}
-                        className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
-                      >
-                         <option value="" disabled>
-                          Select an option
-                        </option> 
-                        <option value="balcony">Balcony</option>
-                        <option value="garden">Garden</option>
-                        <option value="pool">Pool</option>
-                        <option value="garage">Garage</option>
-                      </select>
-                      {errors.characteristics && <p className="text-red-500 text-sm">{errors.characteristics}</p>}
+                  <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
+                   {showModalForUpdate ? (
+                      <h3 className="text-2xl font-semibold">
+                        UPDATE APARTMENT
+                      </h3>
+                    ) : (
+                      <h3 className="text-2xl font-semibold">
+                        ADD APARTMENT
+                      </h3>
+                    )}
+                    <button className="p-1 ml-auto bg-transparent border-0 text-black float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                    onClick={() => handleCloseModal()}>
+                    <span className="bg-transparent text-black h-6 w-6 text-2xl block outline-none focus:outline-none">
+                    <svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-gray-600">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    </span>
+                  </button>
+                  </div>
 
-                    </div>
-                  ) :
-                  key === 'description' ? ( 
-                  
-                    <div key={key} className="mb-4">
-                      <label htmlFor={key} className="block text-sm font-medium mb-2 dark:text-white">
-                        {key.charAt(0).toUpperCase() + key.slice(1)}
-                      </label>
-                      <textarea
-                        id={key}
-                        name={key}  
-                        value={value}
-                        onChange={handleChange}
-                        className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
-                        rows="3"
-                        placeholder="This is a textarea placeholder"
-                      />
-                  {errors.description && <p className="text-red-500 text-sm">{errors.description}</p>}
-                    </div>
-                  
-                  ) :
-                  key === 'city' ? (
-                    <div key={key} className="mb-4">
-                      <label htmlFor={key} className="block text-sm font-medium mb-2 dark:text-white">
-                        {key.charAt(0).toUpperCase() + key.slice(1)}
-                      </label>
-                      <select
+                  {/*body*/}
+                  <div className="relative p-6 flex-auto overflow-scroll-y">
+                    <form className=" mb-2 w-80 max-w-screen-lg sm:w-96" >
+                      <div className="mb-4 flex flex-col gap-6">
+                        <div className="relative h-11 w-full min-w-[200px]">
+                          <input
+                            className="peer h-full w-full rounded-md border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-600 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
+                            placeholder=" "
+                            value={apartmentData.name}
+                            name="name"
+                            onChange={handleChange}/>
+                          <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[4.1] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-gray-600 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:!border-gray-600 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:!border-gray-600 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
+                             Name
+                          </label>
+                          {errors.name && <span className="text-red-600 text-xs">{errors.name}</span>}
+                        </div>
+                        <div className="relative h-auto w-full min-w-[200px]">
+                          <input
+                            className="peer h-full w-full rounded-md border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-600 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
+                            type="file"
+                            multiple
+                            onChange={handleImageChange}
+                            name="imagePath"
 
-                        id={key}
-                        name={key}
-                        value={value}
-                        onChange={handleChange}
-                        className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
-                      >
-                        <option value="" disabled>
-                          Select a city
-                        </option>
-                        <option value="1">City 1</option>
-                        <option value="2">City 2</option>
-                        <option value="3">City 3</option>
-                        <option value="4">City 4</option>
-                      </select>
-                      {errors.city && <p className="text-red-500 text-sm">{errors.city}</p>}
+                          />
+                          <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[4.1] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-gray-600 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:!border-gray-600 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:!border-gray-600 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
+                            Images
+                          </label>
+                        </div>
+                        {errors.images && <span className="text-red-600 text-xs">{errors.images}</span>}
+                        <div className="relative h-11 w-full min-w-[200px]">
+                          <input
+                            className="peer h-full w-full rounded-md border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-600 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
+                            placeholder=" "
+                            value={apartmentData.city}
+                            name="city"
+                            onChange={handleChange}
+                          />
+                          <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[4.1] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-gray-600 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:!border-gray-600 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:!border-gray-600 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
+                            City
+                          </label>
+                          {errors.city && <span className="text-red-600 text-xs">{errors.city}</span>}
+                        </div>
+                        {/* Address */}
+                        <div className="relative h-11 w-full min-w-[200px]">
+                          <input
+                            className="peer h-full w-full rounded-md border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-600 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
+                            placeholder=" "
+                            value={apartmentData.address}
+                            name="address"
+                            onChange={handleChange}
+                          />
+                          <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[4.1] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-gray-600 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:!border-gray-600 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:!border-gray-600 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
+                            Address
+                          </label>
+                          {errors.address && <span className="text-red-600 text-xs">{errors.address}</span>}
+                        </div>
+                        {/* Price */}
+                        <div className="relative h-11 w-full min-w-[200px]">
+                          <input
+                            className="peer h-full w-full rounded-md border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-600 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
+                            placeholder=" "
+                            value={apartmentData.price}
+                            name="price"
+                            onChange={handleChange}
+                          />
+                          <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[4.1] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-gray-600 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:!border-gray-600 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:!border-gray-600 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
+                            Price
+                          </label>
+                          {errors.price && <span className="text-red-600 text-xs">{errors.price}</span>}
+                        </div>
+                        {/* Description */}
+                        <div className="relative h-11 w-full min-w-[200px] min-h-[5rem]">
+                          <textarea
+                            className="peer h-full w-full rounded-md border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-600 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
+                            placeholder=" "
+                            value={apartmentData.description}
+                            name="description"
+                            onChange={handleChange}
+                          ></textarea>
+                          <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[4.1] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-gray-600 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:!border-gray-600 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:!border-gray-600 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
+                            Description
+                          </label>
+                          {errors.description && <span className="text-red-600 text-xs">{errors.description}</span>}
+                        </div>
+                        {/* Number of Persons */}
+                        <div className="relative h-11 w-full min-w-[200px]">
+                          <input
+                            className="peer h-full w-full rounded-md border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-600 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
+                            placeholder=" "
+                            value={apartmentData.numberOfPersons}
+                            name="numberOfPersons"
+                            onChange={handleChange}
+                          />
+                          <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[4.1] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-gray-600 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:!border-gray-600 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:!border-gray-600 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
+                            Number of Persons
+                          </label>
+                          {errors.numberOfPersons && <span className="text-red-600 text-xs">{errors.numberOfPersons}</span>}
+                        </div>
+                        {/* Space */}
+                        <div className="relative h-11 w-full min-w-[200px]">
+                          <input
+                            className="peer h-full w-full rounded-md border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-600 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
+                            placeholder=" "
+                            value={apartmentData.space}
+                            name="space"
+                            onChange={handleChange}
+                          />
+                          <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[4.1] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-gray-600 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:!border-gray-600 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:!border-gray-600 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
+                            Space
+                          </label>
+                          {errors.space && <span className="text-red-600 text-xs">{errors.space}</span>}
+                        </div>
+                        {/* Characteristics */}
+                        <div className="relative">
+                          <select
+                            className="peer h-full w-full rounded-md border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-600 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
+                            multiple
+                            onChange={handleOptionChange}
+                            name="characteristics"
+                          >
+                            {availableCharacteristics.map((characteristic) => (
+                              <option key={characteristic.id} value={characteristic.value}>
+                                {characteristic.label}
+                              </option>
+                            ))}
+                          </select>
+                          <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[4.1] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-gray-600 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:!border-gray-600 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:!border-gray-600 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
+                            Characteristics
+                          </label>
+                        </div>
+                        {errors.characteristics && <span className="text-red-600 text-xs">{errors.characteristics}</span>}
+                        
+                        </div>
+                        {showModalForUpdate ? (
 
-                    </div>
-                  ) :
-                  key === 'numberOfPersons' ? (
-                    <div key={key} className="mb-4">
-                      <label htmlFor={key} className="block text-sm font-medium mb-2 dark:text-white">
-                        {key.charAt(0).toUpperCase() + key.slice(1)}
-                      </label>
-                      <select
-                        id={key}
-                        name={key}
-                        value={value}
-                        onChange={handleChange}
-                        className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
-                      >
-                        <option value="" disabled>
-                          Select number of persons
-                        </option>
-                        <option value="1">1 person</option>
-                        <option value="2">2 persons</option>
-                        <option value="3">3 persons</option>
-                        <option value="4">4 persons</option>
-                      </select>
-                      {errors[key] && <p className="text-red-500 text-sm">{errors[key]}</p>}
-                    </div>
-                  ) :
-                  (
-                    
-                <div key={key} className="mb-4">
-                  <label htmlFor={key} className="block text-sm font-medium mb-2 dark:text-white">
-                    {key.charAt(0).toUpperCase() + key.slice(1)}
-                  </label>
-                  <input
-                    type="text"
-                    id={key}
-                    name={key}
-                    value={value}
-                    onChange={handleChange}
-                    className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
-                    placeholder={`Enter ${key}`}
-                  />
-                      {errors[key] && <p className="text-red-500 text-sm">{errors[key]}</p>}
+                        <button
+                        type="button"
+                        onClick={handleUpdate}
+                        className="mt-6 block w-full select-none rounded-lg bg-gray-700 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-gray-600/20 transition-all hover:shadow-lg hover:shadow-gray-600/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" data-ripple-light="true">
+                          Update
+                        </button>
+                        )
+                        :(
+
+                      <button 
+                      type="button"
+                      onClick={handleSubmit}
+                      className="mt-6 block w-full select-none rounded-lg bg-gray-700 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-gray-600/20 transition-all hover:shadow-lg hover:shadow-gray-600/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" data-ripple-light="true">
+                        Save
+
+                      </button>
+                       )}
+                    </form>
+                  </div>
                 </div>
-                )
-              ))}
+              </div>
             </div>
-            <div className="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-gray-700">
-              <button
-                type="button"
-                className="py-2 px-4 inline-flex items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                onClick={handleSubmit}
-              >
-                Save
-              </button>
-              <button
-                type="button"
-                className="py-2 px-4 inline-flex items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-gray-700 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                data-hs-overlay="#hs-focus-management-modal"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+            <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+          </>
+        ) : null}
     </>
+    
   );
 };
 

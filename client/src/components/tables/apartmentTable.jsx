@@ -1,13 +1,29 @@
+import { useState } from "react";
 import ApartmentModal from "../modals/ApartmentModal";
 import DashCard from "../myn/DashCard";
 import { useGetApartmentsQuery } from "../../store/api/apartmentQuery";
 
 
 export default function ApartmentsTable () {
+  const [showModal, setShowModal] = useState(false);
+  const [showModalForUpdate, setShowModalForUpdate] = useState(false);
+  const [apartmentToUpdate, setApartmentToUpdate] = useState(null);
+  const handleUpdate = (apartment) => {
+    setShowModalForUpdate(true);
+    setApartmentToUpdate(apartment);
+    setShowModal(true);
+  }
+
   const { data: apartments, error, isLoading } = useGetApartmentsQuery();
   console.log(apartments)
+  if (isLoading) return 'Loading...';
+  if (error) return `Error! ${error.message}`;
 
+  // const handleDelete = (id) => {
+  //   console.log(id);
+  // }
 
+  
   return (  
     <>
   
@@ -32,7 +48,14 @@ export default function ApartmentsTable () {
         
                     <div>
                       <div class="inline-flex gap-x-2">
-                      <ApartmentModal/>
+                      <div className=" rounded-lg mb-3 me-3 pt-6">
+                        <div className='flex justify-end mt-5'>
+                          <button onClick={() => setShowModal(true)} className="block text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-800 " type="button">
+                          + Add New Apartment
+                          </button>
+                        </div>
+                        </div>    
+                      <ApartmentModal showModal={showModal} setShowModal={setShowModal} apartmentToUpdate={apartmentToUpdate } showModalForUpdate={showModalForUpdate} setShowModalForUpdate={setApartmentToUpdate}/>
                       </div>
                     </div>
                   </div>
@@ -42,121 +65,129 @@ export default function ApartmentsTable () {
                   <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                     <thead class="bg-gray-50 dark:bg-slate-800">
                       <tr>
-                        <th scope="col" class="ps-6 py-3 text-start">
-                          <label for="hs-at-with-checkboxes-main" class="flex">
-                            <input type="checkbox" class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-at-with-checkboxes-main"/>
-                            <span class="sr-only">Checkbox</span>
-                          </label>
-                        </th>
-        
-                        <th scope="col" class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start">
+                        <th scope="col" class="ps-6 lg:ps-3 xl:ps-6 pe-6 py-3 text-start">
                           <div class="flex items-center gap-x-2">
-                            <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
-                              Name
-                            </span>
+                            <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200"> Name </span>
                           </div>
                         </th>
-        
                         <th scope="col" class="px-6 py-3 text-start">
                           <div class="flex items-center gap-x-2">
                             <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
-                              Position
+                              City
                             </span>
                           </div>
                         </th>
-        
                         <th scope="col" class="px-6 py-3 text-start">
                           <div class="flex items-center gap-x-2">
                             <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
-                              Status
+                              Address
                             </span>
                           </div>
                         </th>
-        
                         <th scope="col" class="px-6 py-3 text-start">
                           <div class="flex items-center gap-x-2">
                             <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
-                              Portfolio
+                              Price
                             </span>
                           </div>
                         </th>
-        
                         <th scope="col" class="px-6 py-3 text-start">
                           <div class="flex items-center gap-x-2">
                             <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
-                              Created
+                              Description
                             </span>
                           </div>
                         </th>
-        
-                        <th scope="col" class="px-6 py-3 text-end"></th>
+                        <th scope="col" class="px-6 py-3 text-start">
+                          <div class="flex items-center gap-x-2">
+                            <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
+                              Number of Persons
+                            </span>
+                          </div>
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-start">
+                          <div class="flex items-center gap-x-2">
+                            <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
+                              Space
+                            </span>
+                          </div>
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-start">
+                          <div class="flex items-center gap-x-2">
+                            <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
+                              Characteristics
+                            </span>
+                          </div>
+                        </th>
                       </tr>
                     </thead>
-        
+
                     <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                      <tr>
-                        <td class="size-px whitespace-nowrap">
-                          <div class="ps-6 py-3">
-                            <label for="hs-at-with-checkboxes-1" class="flex">
-                              <input type="checkbox" class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-at-with-checkboxes-1"/>
-                              <span class="sr-only">Checkbox</span>
-                            </label>
-                          </div>
-                        </td>
-                        <td class="size-px whitespace-nowrap">
+                      {apartments && apartments.map((apartment) => (
+                      <tr key={apartment._id}>
+                        <td class=" ps-5 size-px whitespace-nowrap">
                           <div class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
                             <div class="flex items-center gap-x-3">
-                              <img class="inline-block size-[38px] rounded-full" src="https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80" alt="Image Description"/>
+                              <img class="inline-block size-[70px] rounded" src={apartment.images[0]} alt="Apartment Image"/>
                               <div class="grow">
-                                <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200">Christina Bersh</span>
-                                <span class="block text-sm text-gray-500">christina@site.com</span>
-                              </div>
-                            </div>
-                          </div>
-                        </td>
-                        <td class="h-px w-72 whitespace-nowrap">
-                          <div class="px-6 py-3">
-                            <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200">Director</span>
-                            <span class="block text-sm text-gray-500">Human resources</span>
-                          </div>
-                        </td>
-                        <td class="size-px whitespace-nowrap">
-                          <div class="px-6 py-3">
-                            <span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500">
-                              <svg class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-                              </svg>
-                              Active
-                            </span>
-                          </div>
-                        </td>
-                        <td class="size-px whitespace-nowrap">
-                          <div class="px-6 py-3">
-                            <div class="flex items-center gap-x-3">
-                              <span class="text-xs text-gray-500">1/5</span>
-                              <div class="flex w-full h-1.5 bg-gray-200 rounded-full overflow-hidden dark:bg-gray-700">
-                                <div class="flex flex-col justify-center overflow-hidden bg-gray-800 dark:bg-gray-200" role="progressbar" style={{width: "25%"}} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200">{apartment.name}</span>
                               </div>
                             </div>
                           </div>
                         </td>
                         <td class="size-px whitespace-nowrap">
                           <div class="px-6 py-3">
-                            <span class="text-sm text-gray-500">28 Dec, 12:12</span>
+                            <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200">{apartment.city}</span>
+                          </div>
+                        </td>
+                        <td class="size-px whitespace-nowrap">
+                          <div class="px-6 py-3">
+                            <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200">{apartment.address}</span>
+                          </div>
+                        </td>
+                        <td class="size-px whitespace-nowrap">
+                          <div class="px-6 py-3">
+                            <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200">{apartment.price}</span>
+                          </div>
+                        </td>
+                        <td class="size-px whitespace-nowrap">
+                          <div class="px-6 py-3">
+                            <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200">{apartment.description}</span>
+                          </div>
+                        </td>
+                        <td class="size-px whitespace-nowrap">
+                          <div class="px-6 py-3">
+                            <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200">{apartment.numberOfPersons}</span>
+                          </div>
+                        </td>
+                        <td class="size-px whitespace-nowrap">
+                          <div class="px-6 py-3">
+                            <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200">{apartment.space}</span>
+                          </div>
+                        </td>
+                        <td class="size-px whitespace-nowrap">
+                          <div class="px-6 py-3">
+                            <ul class="list-disc list-inside text-sm font-semibold text-gray-800 dark:text-gray-200">
+                              {apartment.characteristics.map((characteristic, index) => (
+                                <li key={index}>{characteristic}</li>
+                              ))}
+                            </ul>
                           </div>
                         </td>
                         <td class="size-px whitespace-nowrap">
                           <div class="px-6 py-1.5">
-                            <a class="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                            <button
+                            onClick={() => handleUpdate(apartment)}
+                            class="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
                               Edit
-                            </a>
+                            </button>
                           </div>
                         </td>
                       </tr>
-        
-
+                      ))}
                     </tbody>
                   </table>
+
                   {/* <!-- End Table --> */}
         
                   {/* <!-- Footer --> */}

@@ -38,3 +38,4 @@ const apartmentApi = createApi({
 
 
 export const { useGetApartmentsQuery, useGetApartmentQuery, useCreateApartmentMutation, useUpdateApartmentMutation, useDeleteApartmentMutation } = apartmentApi;
+export default apartmentApi ;

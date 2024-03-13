@@ -2,7 +2,6 @@
 const Apartment = require('../../models/apartment')
 // const City = require('../../models/city')
  const User = require('../../models/user')
- const cloudinary = require('cloudinary').v2;
 
 
 // Create a new apartment
@@ -17,49 +16,34 @@ const Apartment = require('../../models/apartment')
     //  }
 
      async createApartment(req, res) {
-         const { name, image, city, address, price, description, numberOfPersons, space, characteristics, owner } = req.body;
-
+         const { name, images, city, address, price, description, numberOfPersons, space, characteristics, owner } = req.body;
          console.log(req.body);
-    //       // Use the uploaded file's name as the asset's public ID and 
-    // // allow overwriting the asset with new versions
-    // const options = {
-    //     use_filename: true,
-    //     unique_filename: false,
-    //     overwrite: true,
-    //   };
-  
-    //   try {
-    //     // Upload the image
-    //     const result = await cloudinary.uploader.upload(imagePath, options);
-    //     console.log(result);
-    //     return result.public_id;
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
-        //  try {
-        //      const newApartment = new Apartment({
-        //          name,
-        //          image,
-        //          city,
-        //          address,
-        //          price,
-        //          description,
-        //          numberOfPersons,
-        //          space,
-        //          characteristics,
-        //          owner : '60f3e3e3e3e3e3e3e3e3e3e3',
-        //      });
-        //      await newApartment.save();
-        //      res.status(201).json({ message: 'Apartment created successfully.' });
-        //  } catch (error) {
-        //      console.error(error);
-        //      res.status(500).json({ error: error.message });
-        //  }
+         try {
+             const newApartment = new Apartment({
+                 name,
+                 images,
+                 city,
+                 address,
+                 price,
+                 description,
+                 numberOfPersons,
+                 space,
+                 characteristics,
+                 owner : '60f3e3e3e3e3e3e3e3e3e3e3',
+             });
+             await newApartment.save();
+             res.status(201).json({ message: 'Apartment created successfully.',
+                                    apartment: newApartment});
+         } catch (error) {
+             console.error(error);
+             res.status(500).json({ error: error.message });
+         }
      }
 
      async getApartments(req, res) {
          try {
              const apartments = await Apartment.find();
+             console.log(apartments)
              res.status(200).json(apartments);
          } catch (error) {
              console.error(error);

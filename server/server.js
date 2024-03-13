@@ -6,7 +6,6 @@ const dotenv = require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const app = express();
 const cors = require('cors')
-const multer = require('multer');
 
 
 const cloudinary = require('cloudinary').v2;
@@ -16,7 +15,6 @@ cloudinary.config({
   api_secret: process.env.API_SECRET
 });
 
-const upload = multer({ dest: 'uploads/' }); // Optional: Set a temporary storage directory
 
 // Set up the express app to handle data parsing
 const connectDatabase = require('./config/db');

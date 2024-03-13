@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useCreateApartmentMutation } from '../../store/api/apartmentQuery';
+import axios from 'axios';
 const ApartmentModal = () => {
  
-
+  const [imagepath, setImagePath] = useState([]);
   const [apartmentData, setApartmentData] = useState({
     name: '',
-    image: [],
+    images: [],
     city: '',
     address: '',
     price: '',
@@ -14,14 +15,14 @@ const ApartmentModal = () => {
     space: '',
     characteristics: [],
     });
+
     const [errors , setErrors] = useState({});
-    const [AddApartment, { isLoading, isError, error }] =
-    useCreateApartmentMutation();
+    const [AddApartment, { isLoading, isError, error }] = useCreateApartmentMutation();
 
     const validate = () => {
       const newErrors = {};
       if (!apartmentData.name) newErrors.name = 'Name is required';
-      if (!apartmentData.image.length === 0) newErrors.image = 'Image is required';
+      if (!apartmentData.images.length === 0) newErrors.images = 'Image is required';
       if (!apartmentData.city) newErrors.city = 'City is required';
       if (!apartmentData.address) newErrors.address = 'Address is required';
       if (!apartmentData.price) newErrors.price = 'Price is required';
@@ -35,18 +36,17 @@ const ApartmentModal = () => {
     return Object.keys(newErrors).length === 0;
 
     };
-    console.log(errors);
+
+    
 
     
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    // console.log(name, value);
     setApartmentData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
-    // console.log(apartmentData);
   };
 
   const handleOptionChange = (e) => {
@@ -63,28 +63,68 @@ const ApartmentModal = () => {
 
   const handleImageChange = (e) => {
     const { name, files } = e.target;
-    setApartmentData((prevData) => ({
-      ...prevData,
-      [name]: files,
-    }));
+    if (!files) return; // Handle no files selected (optional)
+
+    // console.log(name, files);
+     // Convert the FileList object to an array
+  const filesArray = Array.from(files);
+    setImagePath(filesArray);
+    // console.log(imagepath);
   };
+
+
+const handleImageSubmit = async () => {
+  const cloudinaryPreset = 'y2xzakhz'; // Replace with your preset name
+  const cloudinaryUrl = `https://api.cloudinary.com/v1_1/dbexsjmb3/image/upload`; // Cloudinary API endpoint
+
+  const formData = new FormData();
+  formData.append('upload_preset', cloudinaryPreset);
+
+  const uploadPromises = imagepath.map((image) => {
+    formData.append('file', image); // Add each image to the form data
+
+  return axios.post(cloudinaryUrl, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data', // Set content type for multipart form data
+      },
+    }); 
+  });
+
+  try {
+    const responses = await Promise.all(uploadPromises);
+    const uploadedImageUrls =  responses.map((response) => response.data.secure_url);
+    return uploadedImageUrls;
+    
+    } catch (error) {
+    console.error('Upload failed:', error);
+    // Handle upload errors (display error messages, etc.)
+  }
+
+}
 
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(!validate()){
+    if (!validate()) {
       return;
     }
-    console.log(apartmentData);
-    
-    try {
-      const response = await AddApartment(apartmentData);
-      console.log('Apartment added', response.data);
+    const urls = await handleImageSubmit();
 
-    } catch (error) {
-      console.log(error.message)
-    }
+      try {
+        console.log(apartmentData);
+        const obj = {
+          ...apartmentData,
+          images: urls
+        }
+        console.log('object ' , obj);
+        const apartmentResponse = await AddApartment(obj);
+        console.log('Aparntment added', apartmentResponse.data);
+      } catch (error) {
+        console.error('Upload failed:', error);
+        // Handle upload errors (display error messages, etc.)
+      }
+  
   };
 
   return (
@@ -133,16 +173,16 @@ const ApartmentModal = () => {
             <div className="p-4 overflow-y-auto">
               {/* Generate input fields based on the schema */}
               {Object.entries(apartmentData).map(([key, value]) => (
-                  key === 'image' ? (
+                  key === 'images' ? (
                     <div key={key} className="mb-4">
                       <label htmlFor={key} className="block text-sm font-medium mb-2 dark:text-white">
                         {key.charAt(0).toUpperCase() + key.slice(1)}
                       </label>
                       <input
                         type="file"
-                        accept="image/*"
+                        accept=' image/*'
                         id={key}
-                        name={key}
+                        name= {imagepath}
                         multiple={true}
                         onChange={handleImageChange}
                         className="block w-full border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600

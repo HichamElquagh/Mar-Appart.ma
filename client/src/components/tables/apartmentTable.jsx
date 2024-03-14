@@ -12,11 +12,15 @@ export default function ApartmentsTable () {
   const [showModal, setShowModal] = useState(false);
   const [showModalForUpdate, setShowModalForUpdate] = useState(false);
   const [apartmentToUpdate, setApartmentToUpdate] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(3); // Adjust this value according to your needs
+
   const handleUpdate = (apartment) => {
     setShowModalForUpdate(true);
     setApartmentToUpdate(apartment);
     setShowModal(true);
   }
+
   const { data: apartments, error, isLoading, refetch } = useGetApartmentsQuery();
   useEffect(() => { 
     refetch();
@@ -39,6 +43,13 @@ const handleDelete = async (id) => {
     }
   
 }
+
+ // Logic for pagination
+ const indexOfLastItem = currentPage * itemsPerPage;
+ const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+ const currentItems = apartments.slice(indexOfFirstItem, indexOfLastItem);
+
+ const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   
   return (  
@@ -154,7 +165,7 @@ const handleDelete = async (id) => {
                     </thead>
 
                     <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                      {apartments && apartments.map((apartment) => (
+                      {apartments && currentItems.map((apartment) => (
                       <tr key={apartment._id}>
                         <td class=" ps-5 size-px whitespace-nowrap">
                           <div class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
@@ -230,29 +241,37 @@ const handleDelete = async (id) => {
 
                   {/* <!-- End Table --> */}
         
-                  {/* <!-- Footer --> */}
-                  <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-gray-700">
-                    <div>
-                      <p class="text-sm text-gray-600 dark:text-gray-400">
-                        <span class="font-semibold text-gray-800 dark:text-gray-200">6</span> results
-                      </p>
-                    </div>
-        
-                    <div>
-                      <div class="inline-flex gap-x-2">
-                        <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                          <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-                          Prev
-                        </button>
-        
-                        <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                          Next
-                          <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-                        </button>
-                      </div>
+                   {/* Footer */}
+                <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-gray-700">
+                  <div>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      <span className="font-semibold text-gray-800 dark:text-gray-200">{apartments.length}</span> results
+                    </p>
+                  </div>
+
+                  <div>
+                    <div className="inline-flex gap-x-2">
+                      {/* Previous Button */}
+                      <button
+                        onClick={() => paginate(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                      >
+                        Prev
+                      </button>
+
+                      {/* Next Button */}
+                      <button
+                        onClick={() => paginate(currentPage + 1)}
+                        disabled={indexOfLastItem >= apartments.length}
+                        className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                      >
+                        Next
+                      </button>
                     </div>
                   </div>
-                  {/* <!-- End Footer --> */}
+                </div>
+                {/* End Footer */}
                 </div>
               </div>
             </div>

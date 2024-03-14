@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const authRouter = require('./routes/auth/auth.router');
 const apartmentRouter = require('./routes/apartment/apartment.router');
+const userRouter = require('./routes/users/user.router');
 const dotenv = require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const app = express();
@@ -41,6 +42,7 @@ app.use((err, req, res, next) => {
 
 app.use('/auth', authRouter);
 app.use('/apartments', apartmentRouter );
+app.use('/users', userRouter);
 // Start the server
 const port = process.env.PORT || 3000; // Use environment variable or default port 3000
 app.listen(port, () => {

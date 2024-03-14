@@ -5,10 +5,11 @@ import React, { Component } from 'react';
 
 
 
+
 const DashProfile = () => {
     return (
         <>
-       <main class="w-full min-h-screen py-1 md:w-2/3 lg:w-3/4 flex justify-center">
+       <main class="  min-h-screen py-1 md:w-2/3 lg:w-3/4 flex justify-center">
         <div class="p-2 md:p-4">
             <div class="w-full px-6 pb-8 mt-8 sm:max-w-xl sm:rounded-lg">
                 <h2 class="pl-6 text-2xl font-bold sm:text-xl">Public Profile</h2>

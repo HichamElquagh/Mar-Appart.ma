@@ -72,11 +72,12 @@ const Apartment = require('../../models/apartment')
 
      async updateApartment(req, res) {
          const { id } = req.params;
-         const { name, image, city, address, price, description, numberOfPersons, space, characteristics, owner } = req.body;
+         const { name, images, city, address, price, description, numberOfPersons, space, characteristics, owner } = req.body;
+         console.log(req.body);
          try {
              const apartment = await Apartment.findByIdAndUpdate(id, {
                  name,
-                 image,
+                 images,
                  city,
                  address,
                  price,

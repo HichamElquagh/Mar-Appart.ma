@@ -1,8 +1,22 @@
 import React from "react";
 import DashCard from "../myn/DashCard";
+import {useGetUsersQuery , useDeleteUserMutation} from "../../store/api/userQuery";
+import toast from "react-hot-toast";
+import { RiDeleteBinLine } from "react-icons/ri";
 
 const UserTable = () => {
 
+    const { data, error, isLoading, refetch } = useGetUsersQuery();
+    const [deleteUser] = useDeleteUserMutation();
+
+    const handleDeleteUser = async (id) => {
+        await deleteUser(id);
+        refetch();
+        toast.success('User deleted successfully');
+    }
+
+    
+    
     return (
         <>
         <DashCard />
@@ -25,20 +39,7 @@ const UserTable = () => {
               </p>
             </div>
 
-            <div>
-              <div className="inline-flex gap-x-2">
-                <a className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
-                  View all
-                </a>
-
-                <a className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
-                  <svg className="flex-shrink-0 size-3" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M2.63452 7.50001L13.6345 7.5M8.13452 13V2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                  </svg>
-                  Add user
-                </a>
-              </div>
-            </div>
+            
           </div>
           {/* <!-- End Header --> */}
 
@@ -46,15 +47,10 @@ const UserTable = () => {
           <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
             <thead className="bg-gray-50 dark:bg-slate-800">
               <tr>
-                <th scope="col" className="ps-6 py-3 text-start">
-                  <label for="hs-at-with-checkboxes-main" className="flex">
-                    <input type="checkbox" className="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-at-with-checkboxes-main" />
-                    <span className="sr-only">Checkbox</span>
-                  </label>
-                </th>
+
 
                 <th scope="col" className="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start">
-                  <div className="flex items-center gap-x-2">
+                  <div className=" ps-6 flex items-center gap-x-2">
                     <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
                       Name
                     </span>
@@ -64,7 +60,7 @@ const UserTable = () => {
                 <th scope="col" className="px-6 py-3 text-start">
                   <div className="flex items-center gap-x-2">
                     <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
-                      Position
+                      Role
                     </span>
                   </div>
                 </th>
@@ -72,7 +68,7 @@ const UserTable = () => {
                 <th scope="col" className="px-6 py-3 text-start">
                   <div className="flex items-center gap-x-2">
                     <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
-                      Status
+                      Phone
                     </span>
                   </div>
                 </th>
@@ -98,39 +94,38 @@ const UserTable = () => {
             </thead>
 
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+              { data ? (
+                data?.map((user) => (
+              
               <tr>
-                <td className="size-px whitespace-nowrap">
-                  <div className="ps-6 py-3">
-                    <label for="hs-at-with-checkboxes-1" className="flex">
-                      <input type="checkbox" className="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-at-with-checkboxes-1"/>
-                      <span className="sr-only">Checkbox</span>
-                    </label>
-                  </div>
-                </td>
-                <td className="size-px whitespace-nowrap">
+             
+                <td className="ps-6 size-px whitespace-nowrap">
                   <div className="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
                     <div className="flex items-center gap-x-3">
-                      <img className="inline-block size-[38px] rounded-full" src="https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80" alt="Image Description" />
-                      <div className="grow">
-                        <span className="block text-sm font-semibold text-gray-800 dark:text-gray-200">Christina Bersh</span>
-                        <span className="block text-sm text-gray-500">christina@site.com</span>
+                    <img
+                        className="inline-block size-[38px] rounded-full cursor-pointer"
+                        src={user.image}
+                        alt="Image Description"
+                        onClick={() => openModal(user.image)}
+                      />                      <div className="grow">
+                        <span className="block text-sm font-semibold text-gray-800 dark:text-gray-200">{user.username}</span>
+                        <span className="block text-sm text-gray-500">{user.email}</span>
                       </div>
                     </div>
                   </div>
                 </td>
                 <td className="h-px w-72 whitespace-nowrap">
                   <div className="px-6 py-3">
-                    <span className="block text-sm font-semibold text-gray-800 dark:text-gray-200">Director</span>
-                    <span className="block text-sm text-gray-500">Human resources</span>
+                    <span className="block text-sm font-semibold text-gray-800 dark:text-gray-200">{user.role}</span>
                   </div>
                 </td>
                 <td className="size-px whitespace-nowrap">
                   <div className="px-6 py-3">
                     <span className="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500">
-                      <svg className="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                      {/* <svg className="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                         <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-                      </svg>
-                      Active
+                      </svg> */}
+                      {user.phone}
                     </span>
                   </div>
                 </td>
@@ -151,14 +146,36 @@ const UserTable = () => {
                 </td>
                 <td className="size-px whitespace-nowrap">
                   <div className="px-6 py-1.5">
-                    <a className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
-                      Edit
-                    </a>
+                    <button
+                      className="
+                        inline-flex items-center justify-center
+                        rounded-lg
+                        bg-red-50 text-red-500
+                        hover:bg-red-100
+                        dark:bg-red-500/10 dark:text-red-500
+                        dark:hover:bg-red-600/10
+                        focus:outline-none
+                        focus:ring-1 focus:ring-red-500
+                        active:bg-red-200
+                        dark:active:bg-red-600/20
+                      "
+
+                    onClick={() => handleDeleteUser(user._id)}
+                    >
+                    <RiDeleteBinLine />
+                    </button>
                   </div>
                 </td>
               </tr>
 
+                )
+              )) : (
+                <tr>
+                  <td colSpan="6" className="text-center py-4 dark:text-red-600">Loading...</td>
 
+                </tr>
+                
+                )}
             </tbody>
           </table>
           {/* <!-- End Table --> */}

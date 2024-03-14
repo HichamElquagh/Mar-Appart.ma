@@ -18,6 +18,9 @@ const Registerform = () => {
     try {
       const response = await registerMutation(data); // Appelez la mutation avec les données du formulaire
       console.log("Register form submitted", response.data); // Affichez la réponse de l'API
+      if (response.data.accessToken) {
+
+      }
     } catch (error) {
       console.error("Failed to register", error); // Gérez les erreurs
     }

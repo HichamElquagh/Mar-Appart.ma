@@ -45,7 +45,7 @@ class AuthController {
              accessToken: accessToken,
              refreshToken: refreshToken
             });
-            r
+            
         } catch (error) {
             console.error(error);
             res.status(500).json({ error: error.message });

@@ -1,6 +1,6 @@
 import { useState , useEffect } from "react";
 import ApartmentModal from "../modals/ApartmentModal";
-import DashCard from "../myn/DashCard";
+import DashCard from "../dash/DashCard";
 import { useGetApartmentsQuery , useDeleteApartmentMutation } from "../../store/api/apartmentQuery";
 import { RiDeleteBinLine } from "react-icons/ri";
 import toast, { Toaster } from 'react-hot-toast';

@@ -7,11 +7,12 @@ import Dash from './pages/dashboard/sidebar';
 import UserTable from './components/tables/usertable';
 import ApartmentsTable from './components/tables/apartmentTable';
 import Homepage from './pages/home/Homepage';
-import DashProfile from './components/myn/DashProfile';
+import DashProfile from './components/dash/DashProfile';
 import Calendar from './pages/dashboard/calendar';
 import ContactUspage from './pages/home/ContactUspage';
 import FilterPage from './pages/home/FilterPage';
 import ApartmentModal from './components/modals/ApartmentModal';
+import ReservationPage from './pages/home/ReservationPage';
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} /> 
         <Route path="/home" element={<Homepage />} />
+        <Route path="/reservation" element={<ReservationPage />} />
         <Route path="/contactus" element={<ContactUspage />} />
         <Route path="/filter" element={<FilterPage/>}/>
         <Route path="/modal" element={<ApartmentModal />} />

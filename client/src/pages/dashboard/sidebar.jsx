@@ -2,7 +2,7 @@
 import React from 'react';
 import UserTable from '../../components/tables/usertable';
 import logo from "../../assets/images/logo-no-background.png";
-import DashNav from '../../components/myn/DahsNav';
+import DashNav from '../../components/dash/DahsNav';
 import { Link, Outlet } from 'react-router-dom';
 
 

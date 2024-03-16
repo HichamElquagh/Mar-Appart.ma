@@ -5,13 +5,7 @@ const TokenGenerator = require('../../services/TokenGenerator');
 
 
 class AuthController {
-    constructor() {
-        this.tokenGenerator = new TokenGenerator();
-        this.registerUser = this.registerUser.bind(this);
-        this.loginUser = this.loginUser.bind(this);
-
-    }
-
+    
     async registerUser(req, res) {
         const { username, email, phone , password } = req.body;
 
@@ -33,18 +27,25 @@ class AuthController {
                 id: newUser._id,
                 username: newUser.username,
                 email: newUser.email,
-                phone: newUser.phone
+                phone: newUser.phone,
+                role: newUser.role
             };
+            console.log(payload);
 
             await newUser.save();
-            const accessToken = this.tokenGenerator.generateAccessToken(payload);
-            const refreshToken = this.tokenGenerator.generateRefreshToken(payload);
+            const accessToken = TokenGenerator.generateAccessToken(payload);
+            // const refreshToken = TokenGenerator.generateRefreshToken(payload);
 
              
-            res.status(201).json({ message: 'User registered successfully.',
+            res
+            .cookie('accessToken', accessToken, { httpOnly: true, secure: process.env.NODE_ENV === "production", // Ensures the cookie is only sent over HTTPS in production     
+        })
+            .status(201).json({ message: 'User registered successfully.',
              accessToken: accessToken,
-             refreshToken: refreshToken
+             newUser
+
             });
+            
             
         } catch (error) {
             console.error(error);
@@ -69,21 +70,30 @@ class AuthController {
               id: user._id,
               username: user.username,
               email: user.email,
-              phone: user.phone
+              phone: user.phone,
+              role: user.role
           };
-          const accessToken = this.tokenGenerator.generateAccessToken(payload);
-          const refreshToken = this.tokenGenerator.generateRefreshToken(payload);
-          res
-          .cookie('refreshToken', refreshToken, { httpOnly: true, sameSite: 'strict' })
-          .header('Authorization', accessToken)
-          .status(200)
-          .json({ message: 'Login successful.', user });
+          const accessToken = TokenGenerator.generateAccessToken(payload);
+          const refreshToken = TokenGenerator.generateRefreshToken(payload);
+          res.cookie('accessToken', accessToken, {
+            httpOnly: true,
+            sameSite: "lax",
+    });
+            return res.status(200).json({ message: 'Login successful.',
+            user
+        });
           
       } catch (error) {
           console.error(error);
           res.status(500).json({ error: error.message });
       }
   }
+
+    async logoutUser(req, res) {
+        console.log('logout');
+        res.clearCookie('accessToken', ).status(200).json({ message: 'Logout successful.' });
+    }
+
 }
 
 module.exports = new AuthController();

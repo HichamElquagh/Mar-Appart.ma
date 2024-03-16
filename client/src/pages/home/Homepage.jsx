@@ -4,7 +4,7 @@ import backgroundImage1 from "../../assets/images/closeup-shot-building-with-big
 import logo from "../../assets/images/logo-no-background.png";
 import room from "../../assets/images/room.jpg";
 import { Link } from "react-router-dom";
-import HomeNav from "../../components/myn/HomeNav";
+import HomeNav from "../../components/home/HomeNav";
 
 const Homepage = () => {
   return (

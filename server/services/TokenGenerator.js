@@ -5,7 +5,7 @@ class TokenGenerator {
 
 
     generateAccessToken(payload) {
-        return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "1h"});
+        return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "48h"});
     }
 
     generateRefreshToken(payload) {
@@ -17,4 +17,4 @@ class TokenGenerator {
     }
 }
 
-module.exports = TokenGenerator;
+module.exports = new TokenGenerator();

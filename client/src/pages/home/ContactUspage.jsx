@@ -1,5 +1,5 @@
 import React from "react";
-import HomeNav from "../../components/myn/HomeNav";
+import HomeNav from "../../components/home/HomeNav";
 
 const ContactUspage = () => {
 

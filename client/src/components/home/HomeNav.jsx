@@ -2,9 +2,15 @@
 
 import logo from "../../assets/images/logo-no-background.png";
 import { Link } from 'react-router-dom';
+import { useSelector } from "react-redux";
+import {getUserInfo} from "../../store/slices/userSlice";
 
 
 const HomeNav = () => {
+
+     const user = useSelector(getUserInfo);
+     
+
     return (
         <header className="flex flex-wrap md:justify-start md:flex-nowrap z-50 w-full text-sm fixed">
         <nav className="mt-6 relative max-w-[85rem] w-full bg-white border border-gray-200 rounded-[36px] mx-2 py-3 px-4 md:flex md:items-center md:justify-between md:py-0 md:px-6 lg:px-8 xl:mx-auto "
@@ -66,12 +72,7 @@ const HomeNav = () => {
               >
                 Home
               </Link>
-              <Link
-                to={"/dashboard"}
-                className="font-medium text-gray-500 hover:text-gray-400 md:py-6 dark:text-gray-400 dark:hover:text-gray-500"
-              >
-                Dashboard
-              </Link>
+             
               <Link
                 to={"/filter"}
                 className="font-medium text-gray-500 hover:text-gray-400 md:py-6 dark:text-gray-400 dark:hover:text-gray-500"
@@ -88,7 +89,30 @@ const HomeNav = () => {
               </Link>
 
           
-
+               {
+                user ? (
+                  <>
+                   <Link
+                to={"/dashboard"}
+                className="font-medium text-gray-500 hover:text-gray-400 md:py-6 dark:text-gray-400 dark:hover:text-gray-500"
+              >
+                Dashboard
+              </Link>
+                  <Link
+                  to={"/dashboard/profile"}
+                  className="flex items-center gap-x-2 font-medium text-gray-500 hover:text-blue-600 md:border-s md:border-gray-300 md:my-6 md:ps-6 dark:border-gray-700 dark:text-gray-400 dark:hover:text-blue-500"
+                  href="#">
+                    
+                    {user.username}
+                    <img
+                    class="inline-block size-[38px] rounded-full ring-2 ring-white dark:ring-gray-800 ms-3"
+                    src={user.image}
+                    alt="Image Description"
+                  />
+                  </Link>
+                  </>
+                ):(
+                  <>
               <Link
                 to={"/login"}
                 className="flex items-center gap-x-2 font-medium text-gray-500 hover:text-blue-600 md:border-s md:border-gray-300 md:my-6 md:ps-6 dark:border-gray-700 dark:text-gray-400 dark:hover:text-blue-500"
@@ -130,6 +154,10 @@ const HomeNav = () => {
                 </svg>
                 Register
               </Link>
+              </>
+                )
+              }
+
             </div>
           </div>
         </nav>

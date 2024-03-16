@@ -1,10 +1,15 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import VideoBackground from "../myn/VideoBackground";
+import VideoBackground from "../home/VideoBackground";
 import logo from "../../assets/images/logo-black.png";
 import { useRegisterMutation } from "../../store/api/authQuery";
+import { setCredentials } from "../../store/slices/userSlice";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 const Registerform = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -17,9 +22,12 @@ const Registerform = () => {
   const handleRegister = async (data) => {
     try {
       const response = await registerMutation(data); // Appelez la mutation avec les données du formulaire
-      console.log("Register form submitted", response.data); // Affichez la réponse de l'API
-      if (response.data.accessToken) {
+      console.log("Register form submitted", response.data.newUser); // Affichez la réponse de l'API
+      if (response.data.newUser) {
 
+        dispatch(setCredentials(response.data.newUser));
+
+        navigate("/home");
       }
     } catch (error) {
       console.error("Failed to register", error); // Gérez les erreurs
@@ -63,9 +71,8 @@ const Registerform = () => {
                   className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
                   {...register("phone", {
                     required: "Tel is required",
-                    minLength: 10,
-                    maxLength: 10,
-                    pattern: /^[0-9\b]+$/,
+                    maxLength: 25,
+                    // pattern: /^[0-9\b]+$/,
                     message: "Invalid phone number",
                   })}
                 />
@@ -98,7 +105,6 @@ const Registerform = () => {
                   type="password"
                   name="password"
                   placeholder="Enter Password"
-                  minLength={6}
                   className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
                   {...register("password", {
                     required: "Password is required",

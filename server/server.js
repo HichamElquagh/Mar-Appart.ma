@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const bodyParser = require('body-parser');
 const authRouter = require('./routes/auth/auth.router');
 const apartmentRouter = require('./routes/apartment/apartment.router');
 const userRouter = require('./routes/users/user.router');
@@ -9,29 +10,26 @@ const app = express();
 const cors = require('cors')
 
 
-const cloudinary = require('cloudinary').v2;
-cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.API_KEY,
-  api_secret: process.env.API_SECRET
-});
-
-
-// Set up the express app to handle data parsing
-const connectDatabase = require('./config/db');
-
 app.use(cookieParser());
+const connectDatabase = require('./config/db');
 app.use(express.json());
+app.use(bodyParser.json());
+// Set up the express app to handle data parsing
+
+
 connectDatabase();
-
-
 app.use(cors(
   {
-    origin: "http://localhost:5173",
-    credentials: true
+    credentials: true,
+    origin: "http://localhost:5173", 
   }
+  ));
 
-));
+
+
+
+
+
 
 
 // Error handling (optional)

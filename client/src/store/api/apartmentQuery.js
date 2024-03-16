@@ -5,7 +5,9 @@ const baseUrl = 'http://localhost:3000';
 
 const apartmentApi = createApi({
     reducerPath: 'apartmentApi',
-    baseQuery: fetchBaseQuery({ baseUrl }),
+    baseQuery: fetchBaseQuery({ baseUrl,
+        credentials: 'include', // Include cookies in requests
+    }),
     endpoints: (builder) => ({
         getApartments: builder.query({
         query: () => '/apartments',

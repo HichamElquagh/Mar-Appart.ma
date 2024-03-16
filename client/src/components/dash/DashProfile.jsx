@@ -74,13 +74,6 @@ const DashProfile = () => {
                                 placeholder="your profession" required/>
                         </div>
 
-                        <div class="mb-6">
-                            <label for="message"
-                                class="block mb-2 text-sm font-medium text-indigo-900 dark:text-white">Bio</label>
-                            <textarea id="message" rows="4"
-                                class="block p-2.5 w-full text-sm text-indigo-900 bg-indigo-50 rounded-lg border border-indigo-300 focus:ring-indigo-500 focus:border-indigo-500 "
-                                placeholder="Write your bio here..."></textarea>
-                        </div>
 
                         <div class="flex justify-end">
                             <button type="submit"

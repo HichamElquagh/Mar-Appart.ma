@@ -6,7 +6,9 @@ const baseUrl = 'http://localhost:3000';
 
 const authApi = createApi({
   reducerPath: 'authApi',
-  baseQuery: fetchBaseQuery({ baseUrl }),
+  baseQuery: fetchBaseQuery({ baseUrl,
+    credentials: 'include', // Include cookies in requests
+  }),
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (credentials) => ({

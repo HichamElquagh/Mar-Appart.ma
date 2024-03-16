@@ -1,5 +1,5 @@
 import React from "react";
-import DashCard from "../myn/DashCard";
+import DashCard from "../dash/DashCard";
 import {useGetUsersQuery , useDeleteUserMutation} from "../../store/api/userQuery";
 import toast from "react-hot-toast";
 import { RiDeleteBinLine } from "react-icons/ri";
@@ -8,7 +8,7 @@ const UserTable = () => {
 
     const { data, error, isLoading, refetch } = useGetUsersQuery();
     const [deleteUser] = useDeleteUserMutation();
-
+    console.log(data);
     const handleDeleteUser = async (id) => {
         await deleteUser(id);
         refetch();
@@ -171,7 +171,7 @@ const UserTable = () => {
                 )
               )) : (
                 <tr>
-                  <td colSpan="6" className="text-center py-4 dark:text-red-600">Loading...</td>
+                  <td colSpan="6" className="text-center py-4 dark:text-gray-100">No user found...</td>
 
                 </tr>
                 

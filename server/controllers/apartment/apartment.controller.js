@@ -17,7 +17,8 @@ const Apartment = require('../../models/apartment')
 
      async createApartment(req, res) {
          const { name, images, city, address, price, description, numberOfPersons, space, characteristics, owner } = req.body;
-         console.log(req.body);
+         console.log(req.user.id);
+         const user_id = req.user.id;
          try {
              const newApartment = new Apartment({
                  name,
@@ -28,8 +29,8 @@ const Apartment = require('../../models/apartment')
                  description,
                  numberOfPersons,
                  space,
-                 characteristics,
-                 owner : '60f3e3e3e3e3e3e3e3e3e3e3',
+                 characteristics ,
+                 owner : user_id ,
              });
              await newApartment.save();
              if (!newApartment) {
@@ -46,8 +47,14 @@ const Apartment = require('../../models/apartment')
      }
 
      async getApartments(req, res) {
+        console.log('for get apartments')
+        console.log(req.user.id);
+
          try {
-             const apartments = await Apartment.find();
+             const apartments = await Apartment.find(
+                    { owner: req.user.id }
+
+             );
              console.log(apartments)
              res.status(200).json(apartments);
          } catch (error) {

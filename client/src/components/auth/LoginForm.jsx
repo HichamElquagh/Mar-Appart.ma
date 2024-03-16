@@ -1,8 +1,57 @@
  import React, { useState } from 'react';
- import VideoBackground from '../myn/VideoBackground';
+ import VideoBackground from '../home/VideoBackground';
  import logo from '../../assets/images/logo-black.png';
+ import {useLoginMutation} from '../../store/api/authQuery';
+ import {setCredentials} from '../../store/slices/userSlice';
+ import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
+import { useForm } from "react-hook-form";
+
+
 
 const LoginForm = () => {
+
+  
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+
+  const [loginMutation, { isLoading, isError, error }] = useLoginMutation();
+
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+
+
+
+const handlelogin = async (data) => {
+  try {
+    console.log(data);
+
+    const response = await loginMutation(data); // Appelez la mutation avec les données du formulaire
+    // console.log("Login form submitted", response.data.user); // Affichez la réponse de l'API
+    if (response.data.user) {
+      // dispatch(setCredentials(response.user))
+      toast.success('Login successful')
+      dispatch(setCredentials(response.data.user));
+      navigate('/home');
+
+    }
+  }
+  catch (error) {
+    console.error("Failed to login", error); // Gérez les erreurs
+  }
+}
+
+
    
     
     return (
@@ -26,24 +75,44 @@ const LoginForm = () => {
     <i class="fi fi-rr-arrow-left size-36 text-gray-700"></i>
   <h1 className="text-xl md:text-2xl font-bold leading-tight mt-12">Log in to your account</h1>
 
-    <form className="mt-6" action="#" method="POST">
+    <form className="mt-6">
       <div>
         <label className="block text-gray-700">Email Address</label>
-        <input type="email" name="" id="" placeholder="Enter Email Address" className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none" autofocus autocomplete required />
+        <input type="email" name="email" id="" placeholder="Enter Email Address" className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none" autofocus autocomplete 
+          {...register("email", {
+            required: "Email is required",
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+              message: "Invalid email address",
+            },
+          })}
+        />
+           {errors.email && (
+                  <div className="text-red-500">{errors.email.message}</div>
+                )}
       </div>
 
       <div className="mt-4">
         <label className="block text-gray-700">Password</label>
-        <input type="password" name="" id="" placeholder="Enter Password" minlength="6" className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500
-              focus:bg-white focus:outline-none" required />
+        <input type="password" name="password" id="" placeholder="Enter Password" minlength="6" className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500
+              focus:bg-white focus:outline-none" 
+              {...register("password", {
+                required: "Password is required",
+              })}
+              />
+                 {errors.password && (
+                  <div className="text-red-500">{errors.password.message}</div>
+                )}
       </div>
 
       <div className="text-right mt-2">
         <a href="#" className="text-sm font-semibold text-gray-700 hover:text-blue-700 focus:text-blue-700">Forgot Password?</a>
       </div>
 
-      <button type="submit" className="w-full block bg-indigo-500 hover:bg-indigo-400 focus:bg-indigo-400 text-white font-semibold rounded-lg
-            px-4 py-3 mt-6">Log In</button>
+      <button  className="w-full block bg-indigo-500 hover:bg-indigo-400 focus:bg-indigo-400 text-white font-semibold rounded-lg
+            px-4 py-3 mt-6"
+            onClick={handleSubmit(handlelogin)}
+            >Log In</button>
     </form>
 
     <hr className="my-6 border-gray-300 w-full"/>

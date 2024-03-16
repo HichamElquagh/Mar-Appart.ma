@@ -7,8 +7,8 @@ const authenticationMiddleware = require('../../middlewares/authMiddleware')
 const adminPermissionMiddleware = require('../../middlewares/adminPermissionMiddleware')
 
 userRouter.get('/', adminPermissionMiddleware, userController.getUsers)
-userRouter.get('/:id', userController.getUser)
-userRouter.patch('/:id', userController.updateUser)
+userRouter.get('/getUser', authenticationMiddleware, userController.getUser)
+userRouter.patch('/', authenticationMiddleware, userController.updateUser)
 userRouter.delete('/:id', userController.deleteUser)
 
 module.exports = userRouter // Export the router

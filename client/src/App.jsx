@@ -13,6 +13,7 @@ import ContactUspage from './pages/home/ContactUspage';
 import FilterPage from './pages/home/FilterPage';
 import ApartmentModal from './components/modals/ApartmentModal';
 import ReservationPage from './pages/home/ReservationPage';
+import ProtectedRoute from './protectedRoutes/ProtectedRoute ';
 
 
 function App() {
@@ -25,7 +26,7 @@ function App() {
     <BrowserRouter>
     
       <Routes>
-        <Route path="/dashboard" element={<Dash />} >
+        <Route path="/dashboard" element={ <ProtectedRoute><Dash /></ProtectedRoute>} >
         <Route path="/dashboard/" element={<UserTable />} />
         <Route path="/dashboard/profile" element={<DashProfile />} />
           <Route path="/dashboard/users" element={<UserTable />} />
@@ -35,10 +36,9 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} /> 
         <Route path="/home" element={<Homepage />} />
-        <Route path="/reservation" element={<ReservationPage />} />
-        <Route path="/contactus" element={<ContactUspage />} />
-        <Route path="/filter" element={<FilterPage/>}/>
-        <Route path="/modal" element={<ApartmentModal />} />
+        <Route path="/home/reservation" element={<ReservationPage />} />
+        <Route path="/home/contactus" element={<ContactUspage />} />
+        <Route path="/home/filter" element={<FilterPage/>}/>
 
         
               </Routes>

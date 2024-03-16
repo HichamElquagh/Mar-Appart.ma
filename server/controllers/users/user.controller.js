@@ -15,9 +15,15 @@ class UserController {
     }
 
     async getUser(req, res) {
-        const { id } = req.params
+        const  id  = req.user.id
         try {
-            const user = await User.findById(id)
+            const getuser = await User.findById(id)
+            const user = {
+                image: getuser.image,
+                username: getuser.username,
+                email: getuser.email,
+                phone: getuser.phone,
+            }
             if (!user) {
                 return res.status(404).json({ error: 'User not found' })
             }
@@ -31,24 +37,20 @@ class UserController {
    
 
     async updateUser(req, res) {
-        const { id } = req.params
-        const { email, password, name, role } = req.body
-        // const errors = validationResult(req)
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() })
-        }
+        const  id  = req.user.id
+        const { image , email, password, name, role } = req.body
+        
         try {
-            const user = await User.findById(id)
-            if (!user) {
-                return res.status(404).json({ error: 'User not found' })
+            const updateUser = {
+                image,
+                email,
+                password,
+                name,
+                role
             }
-            const hashedPassword = await bcrypt.hash(password, 10)
-            user.email = email
-            user.password = hashedPassword
-            user.name = name
-            user.role = role
-            await user.save()
-            res.status(200).json({ message: 'User updated successfully', user })
+            const updatedUser = await User.findByIdAndUpdate(id, updateUser , { new: true })
+            
+            res.status(200).json({ message: 'User updated successfully', updatedUser })
         } catch (error) {
             console.error(error)
             res.status(500).json({ error: error.message })

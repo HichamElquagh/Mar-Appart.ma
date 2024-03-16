@@ -13,7 +13,7 @@ const userApi = createApi({
         query: () => '/users',
         }),
         getUser: builder.query({
-        query: (id) => `/users/${id}`,
+        query: () => `/users/getUser`,
         }),
         createUser: builder.mutation({
         query: (user) => ({
@@ -24,7 +24,7 @@ const userApi = createApi({
         }),
         updateUser: builder.mutation({
         query: ({ id, ...patch }) => ({
-            url: `/users/${id}`,
+            url: `/users`,
             method: 'PATCH',
             body: patch,
         }),

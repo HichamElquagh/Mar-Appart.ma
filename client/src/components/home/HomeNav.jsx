@@ -74,14 +74,14 @@ const HomeNav = () => {
               </Link>
              
               <Link
-                to={"/filter"}
+                to={"/home/filter"}
                 className="font-medium text-gray-500 hover:text-gray-400 md:py-6 dark:text-gray-400 dark:hover:text-gray-500"
                 href="#"
               >
                 Filter
               </Link>
               <Link
-                to={"/contactus"}
+                to={"/home/contactus"}
                 className="font-medium text-gray-500 hover:text-gray-400 md:py-6 dark:text-gray-400 dark:hover:text-gray-500"
                 href="#"
               >

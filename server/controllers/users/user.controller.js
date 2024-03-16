@@ -38,19 +38,32 @@ class UserController {
 
     async updateUser(req, res) {
         const  id  = req.user.id
-        const { image , email, password, name, role } = req.body
+        const { image , email, username,phone } = req.body
         
         try {
             const updateUser = {
                 image,
                 email,
-                password,
-                name,
-                role
+                username,
+                phone
             }
-            const updatedUser = await User.findByIdAndUpdate(id, updateUser , { new: true })
+            const user = await User.find({email: email})
+            const userphone = await User.find({phone:phone})
+            if (user.email === email) {
+                res.json({
+                    messageValid : 'this email is been used'
+                })
+                
+            }if (userphone.phone === phone) {
+                res.json({
+                    messageValid : 'this phone is been used'
+                })
+            } else {
+                const updatedUser = await User.findByIdAndUpdate(id, updateUser , { new: true })
+                res.status(200).json({ message: 'User updated successfully', updatedUser })
+                
+            }
             
-            res.status(200).json({ message: 'User updated successfully', updatedUser })
         } catch (error) {
             console.error(error)
             res.status(500).json({ error: error.message })

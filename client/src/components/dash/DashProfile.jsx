@@ -1,6 +1,7 @@
 
 
 import React, { Component , useEffect, useState } from 'react';
+import  toast from 'react-hot-toast';
 import axios from 'axios';
 
 
@@ -13,6 +14,7 @@ import {useGetUserQuery, useUpdateUserMutation} from '../../store/api/userQuery'
 
 
 const DashProfile = () => {
+    const [updatedata , setupadtedata] = useState(false)
     const [user, setUser] = useState({
         username: '',
         image: '',
@@ -20,8 +22,8 @@ const DashProfile = () => {
         phone:''
     });
     const [imagePath , setImagePath] = useState({})
-    const { data, error, isLoading } = useGetUserQuery();
-    const [updateUser, { error: updateError, isLoading: isUpdateLoading , refetch }] = useUpdateUserMutation();
+    const { data, error, isLoading, refetch } = useGetUserQuery();
+    const [updateUser, { error: updateError, isLoading: isUpdateLoading  }] = useUpdateUserMutation();
 
     //  console.log(data)
     useEffect(() => {
@@ -30,8 +32,17 @@ const DashProfile = () => {
         }
     }, [data]);
 
+    useEffect(()=>{
+        if(updatedata){
+            refetch()
+            setupadtedata(false)
+        }
+    }, [updatedata])
+
     const handleImageChange =(e) =>{
         setImagePath({...imagePath , [e.target.name] : e.target.files[0] });
+        const fileUrl = URL.createObjectURL(e.target.files[0]);
+        setUser({...user , image : fileUrl})
 
     }
     const handlechange = (e) => {
@@ -60,37 +71,63 @@ const DashProfile = () => {
       }
     };
 
+
+
     const handleUpdate = async () => {
+
+
         
-        
-        const url =  await InsertImageToCloudinary();
+        if(imagePath.image){
+            const url =  await InsertImageToCloudinary();
         const obj = {
             ...user,
             image : url,
         }
         try {
             const update = await updateUser(obj).unwrap();
-            console.log('Apartment data:', update);
-            // if (updateUser){
+            if(update){
+                setupadtedata(true)
+                toast.success('Your Profile updated successfully')
+            }             // if (updateUser){
             // }
             
         } catch (error) {
             console.log(error.message)
         }
+        }else{
+            try {
 
+                const update = await updateUser(user).unwrap(); 
+                console.log(update);  
+                if(update.messageValid){
+                    toast.error(update.messageValid)
+                }if (update.message) {
+                    setupadtedata(true)
+                    toast.success('Your Profile updated successfully')
+                } 
 
-
+            } catch (error) {
+                console.log(error.message);
+            }
+            }
     }
 
+    const handleDeleteImage = () => {
+        const deleteImage = updateUser({...user , image : ''})
+        if(deleteImage){
+            setupadtedata(true)
+            toast.success('Your Image Deleted successfully')
+        }
+    }
 
 
     return (
         <>
 
-       <main class="  min-h-60 py-1 md:w-2/3 lg:w-3/4 flex justify-center">
+       <main class="   min-h-screen py-1 md:w-2/3 lg:w-3/4 flex justify-center">
         <div class="p-2 md:p-4">
             <div class="w-full px-6 pb-8 mt-8 sm:max-w-xl sm:rounded-lg">
-                <h2 class="pl-6 text-2xl font-bold sm:text-xl">Public Profile</h2>
+                <h2 class="pl-6 text-2xl font-bold sm:text-xl"> Profile</h2>
 
                 <div class="grid max-w-2xl mx-auto mt-8">
                 <div class="flex flex-col items-center space-y-5 sm:flex-row sm:space-y-0">
@@ -114,6 +151,7 @@ const DashProfile = () => {
                     Change picture
                     </button>
                     <button
+                    onClick={handleDeleteImage}
                     type="button"
                     class="py-3.5 px-7 text-base font-medium text-indigo-900 focus:outline-none bg-white rounded-lg border border-indigo-200 hover:bg-indigo-100 hover:text-[#202142] focus:z-10 focus:ring-4 focus:ring-indigo-200 "
                     >
@@ -169,7 +207,7 @@ const DashProfile = () => {
                         <div class="flex justify-end">
                             <button type="button"
                                 onClick={handleUpdate}
-                                class="text-white bg-indigo-700  hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800">Save</button>
+                                class="text-white bg-indigo-700  hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800">Update</button>
                         </div>
 
                     </div>

@@ -9,6 +9,9 @@ const apartmentApi = createApi({
         credentials: 'include', // Include cookies in requests
     }),
     endpoints: (builder) => ({
+        getAllApartments: builder.query({
+        query: () => '/apartments/all',
+        }),
         getApartments: builder.query({
         query: () => '/apartments',
         }),
@@ -35,9 +38,13 @@ const apartmentApi = createApi({
             method: 'DELETE',
         }),
         }),
+        searchApartmentByCityOrAddress: builder.query({
+        query: (address, city) => `/apartments/search/${address}/${city}`,
+        }),
+
     }),
     });
 
 
-export const { useGetApartmentsQuery, useGetApartmentQuery, useCreateApartmentMutation, useUpdateApartmentMutation, useDeleteApartmentMutation } = apartmentApi;
+export const { useGetAllApartmentsQuery, useGetApartmentsQuery, useGetApartmentQuery, useCreateApartmentMutation, useUpdateApartmentMutation, useDeleteApartmentMutation , useSearchApartmentByCityOrAddressQuery  } = apartmentApi;
 export default apartmentApi ;

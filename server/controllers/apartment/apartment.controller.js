@@ -63,6 +63,20 @@ const Apartment = require('../../models/apartment')
          }
      }
 
+     async getAllApartments(req, res) {
+
+
+            try {
+                const apartments = await Apartment.find();
+                console.log(apartments)
+                res.status(200).json(apartments);
+            } catch (error) {
+                console.error(error);
+                res.status(500).json({ error: error.message });
+            }
+        }
+
+
      async getApartment(req, res) {
          const { id } = req.params;
          try {
@@ -117,6 +131,30 @@ const Apartment = require('../../models/apartment')
                 console.error(error);
                 res.status(500).json({ error: error.message });
             }
+        }
+
+        async getApartmentsByCityOrAddress(req, res) {
+            const {address, city} = req.params;
+            console.log('for search address',address);
+            console.log('for search city',city);
+
+            try {
+                const apartments = await Apartment.find({
+                    $or: [
+                        { address: { $regex: address } },
+                        { city: { $regex: city } }
+                      ]
+                })
+                console.log(apartments);
+                if (!apartments) {
+                    return res.status(404).json({ error: 'No apartments found.' });
+                }
+                res.status(200).json(apartments);
+            }catch (error) {
+                console.error(error);
+                res.status(500).json({ error: error.message });
+            }
+
         }
     }
 

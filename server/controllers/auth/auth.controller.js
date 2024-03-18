@@ -59,12 +59,12 @@ class AuthController {
       try {
           const user = await User.findOne({ email });
           if (!user) {
-              return res.status(401).json({ error: 'Invalid credentials.' });
+              return res.status(401).json({ error: 'email not found' });
           }
   
           const isMatch = await bcrypt.compare(password, user.password);
           if (!isMatch) {
-              return res.status(401).json({ error: 'Invalid credentials.' });
+              return res.status(401).json({ error: 'Password not match ' });
           }
           const payload = {
               id: user._id,
@@ -74,7 +74,6 @@ class AuthController {
               role: user.role
           };
           const accessToken = TokenGenerator.generateAccessToken(payload);
-          const refreshToken = TokenGenerator.generateRefreshToken(payload);
           res.cookie('accessToken', accessToken, {
             httpOnly: true,
             sameSite: "lax",

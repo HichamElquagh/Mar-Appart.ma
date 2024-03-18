@@ -36,18 +36,19 @@ const handlelogin = async (data) => {
   try {
     console.log(data);
 
-    const response = await loginMutation(data); // Appelez la mutation avec les données du formulaire
-    // console.log("Login form submitted", response.data.user); // Affichez la réponse de l'API
+    const response = await loginMutation(data);
     if (response.data.user) {
       // dispatch(setCredentials(response.user))
-      toast.success('Login successful')
+      toast.success(response.data.message)
       dispatch(setCredentials(response.data.user));
       navigate('/home');
 
+    }else if (response.error) {
+      toast.error(response.error.data.error);
     }
   }
   catch (error) {
-    console.error("Failed to login", error); // Gérez les erreurs
+    console.error("Failed to login", error.message); // Gérez les erreurs
   }
 }
 

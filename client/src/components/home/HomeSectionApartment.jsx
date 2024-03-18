@@ -6,16 +6,31 @@ const HomeSectionApartment = ({ searchData }) => {
     const { data, error, isLoading } = useGetAllApartmentsQuery();
     const [apartments, setApartments] = useState(data);
 
-    console.log(searchData);
+    
 
-    const { data: searchResults, error: searchError, isLoading: searchLoading } = useSearchApartmentByCityOrAddressQuery(searchData.address, searchData.city);
+
+    // if (searchData.address === undefined) {
+    //     searchData.address = "";
+        
+    // }
+    
+    // if (searchData.city === undefined) {
+    //     searchData.city = "";
+    // }
+    // console.log("check address name",searchData.address);
+
+    
+    const { data: searchResults, error: searchError, isLoading: searchLoading ,isError} = useSearchApartmentByCityOrAddressQuery(searchData);
  
     useEffect(() => {
         if (searchResults) {
             setApartments(searchResults);
             console.log(searchResults);
         }
-    }, [searchResults]);
+        if(isError){
+          setApartments([]);
+        }
+    }, [searchResults,isError,searchError]);
 
     useEffect(() => {
         if (data) {

@@ -39,7 +39,12 @@ const apartmentApi = createApi({
         }),
         }),
         searchApartmentByCityOrAddress: builder.query({
-        query: (address, city) => `/apartments/search/${address}/${city}`,
+        query: (data) => {
+            const { city, address } = data;
+            return {
+                url: `/apartments/search?address=${address}&city=${city}`,
+            };
+        },
         }),
 
     }),

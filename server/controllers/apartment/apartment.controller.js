@@ -68,7 +68,7 @@ const Apartment = require('../../models/apartment')
 
             try {
                 const apartments = await Apartment.find();
-                console.log(apartments)
+                // console.log(apartments)
                 res.status(200).json(apartments);
             } catch (error) {
                 console.error(error);
@@ -133,29 +133,41 @@ const Apartment = require('../../models/apartment')
             }
         }
 
-        async getApartmentsByCityOrAddress(req, res) {
-            const {address, city} = req.params;
-            console.log('for search address',address);
-            console.log('for search city',city);
-
+        async  getApartmentsByCityOrAddress(req, res) {
+            const { address, city } = req.query;
+            console.log("City:", city);
+            console.log("Address:", address);
+        
             try {
-                const apartments = await Apartment.find({
-                    $or: [
-                        { address: { $regex: address } },
-                        { city: { $regex: city } }
-                      ]
-                })
-                console.log(apartments);
-                if (!apartments) {
+                let query = {};
+                if (city) {
+                    if (typeof city === "string") {
+                        query.city = { $regex: city };
+                    } else {
+                        return res.status(400).json({ error: 'City must be a string.' });
+                    }
+                }
+                if (address) {
+                    if (typeof address === "string") {
+                        query.address = { $regex: address };
+                    } else {
+                        return res.status(400).json({ error: 'Address must be a string.' });
+                    }
+                }
+        
+                const apartments = await Apartment.find(query);
+        
+                if (!apartments || apartments.length === 0) {
                     return res.status(404).json({ error: 'No apartments found.' });
                 }
+        
                 res.status(200).json(apartments);
-            }catch (error) {
+            } catch (error) {
                 console.error(error);
                 res.status(500).json({ error: error.message });
             }
-
         }
+        
     }
 
     const apartmentController = new ApartmentController();

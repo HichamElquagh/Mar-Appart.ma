@@ -1,4 +1,4 @@
-import React , {useState} from "react";
+import React , {useEffect, useState} from "react";
 import backgroundImage from "../../assets/images/backgroundImage.jpg";
 import backgroundImage1 from "../../assets/images/closeup-shot-building-with-big-wooden-doors.jpg";
 import logo from "../../assets/images/logo-no-background.png";
@@ -6,16 +6,22 @@ import room from "../../assets/images/room.jpg";
 import { Link } from "react-router-dom";
 import HomeNav from "../../components/home/HomeNav";
 import HomeSectionApartment from "../../components/home/HomeSectionApartment";
+import axios from "axios";
+import cities from "../../ma.json"
 
 const Homepage = () => {
-
-  const [searchData, setSearchData] = useState({});
-
+  const [searchData, setSearchData] = useState({
+    address: "",
+    city: ""
+  });
+  
+   
   const handleChange = (e) => {
     setSearchData({
       ...searchData,
       [e.target.name]: e.target.value
     });
+
   };
 
   const handleSubmit = () => {
@@ -74,8 +80,9 @@ const Homepage = () => {
                   className="py-3 px-4 me-4 rounded-lg text-gray-500 font-semibold cursor-pointer bg-white appearance-none"
                 >
                   <option value="all">All cities</option>
-                  <option value="Magnam">Magnam</option>
-                  <option value="city2">City 2</option>
+                  {cities.map((city) => (
+                    <option value={city.city}>{city.city}</option>
+                  ))}
                   {/* Add more cities as needed */}
                 </select>
                 <svg
@@ -88,11 +95,7 @@ const Homepage = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </div>
-              <button 
-              onClick={handleSubmit}
-              className="bg-red-600 py-3 px-5 text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">
-                Search
-              </button>
+              
             </div>
           </div>
         </section> 

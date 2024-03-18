@@ -2,7 +2,11 @@ import React , {useEffect, useState} from "react";
 import { useGetAllApartmentsQuery } from "../../store/api/apartmentQuery";
 import room from "../../assets/images/room.jpg";
 import  {useSearchApartmentByCityOrAddressQuery} from "../../store/api/apartmentQuery";
+import { useNavigate } from "react-router";
 const HomeSectionApartment = ({ searchData }) => {
+  
+  
+  const navigate = useNavigate();
     const { data, error, isLoading } = useGetAllApartmentsQuery();
     const [apartments, setApartments] = useState(data);
 
@@ -38,8 +42,13 @@ const HomeSectionApartment = ({ searchData }) => {
         }
     }
     , [data]);
-  
-
+    const handleApartmentClick = (apartment) => {
+      // Use a preferred routing method to navigate to the detail page
+      // and pass the apartment data as a parameter
+    
+      // Example using `useNavigate` hook from `react-router-dom`:
+      navigate(`/home/apartmentdetail`, { state: apartment });
+    };
 
     return (
        <>
@@ -50,7 +59,12 @@ const HomeSectionApartment = ({ searchData }) => {
     {isLoading && <p>Loading...</p>}
     {apartments && apartments.map((apartment) => (
       
-    <article className="mb-4 overflow-hidden rounded-xl border text-gray-700 shadow-md duration-500 ease-in-out hover:shadow-xl">
+    <button
+    type="button"
+    onClick={() => handleApartmentClick(apartment)} // Add click handler
+
+      key={apartment._id}
+       className="mb-4 overflow-hidden rounded-xl border text-gray-700 shadow-md duration-500 ease-in-out hover:shadow-xl">
 
       <div className="">
         <img src={apartment.images[0]} alt="" className="" />
@@ -126,7 +140,7 @@ const HomeSectionApartment = ({ searchData }) => {
           </li>
         </ul>
       </div>
-    </article>
+    </button >
      ))}
     {/* <!--end property--> */}
   </div>

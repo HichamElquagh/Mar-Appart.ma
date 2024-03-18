@@ -168,6 +168,8 @@ const Apartment = require('../../models/apartment')
             }
         }
         
+
+        
     }
 
     const apartmentController = new ApartmentController();

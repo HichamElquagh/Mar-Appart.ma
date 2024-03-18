@@ -14,6 +14,7 @@ import FilterPage from './pages/home/FilterPage';
 import ApartmentModal from './components/modals/ApartmentModal';
 import ReservationPage from './pages/home/ReservationPage';
 import ProtectedRoute from './protectedRoutes/ProtectedRoute ';
+import ApartmentDetail from './pages/home/ApartmentDetail';
 
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
         <Route path="/home/reservation" element={<ReservationPage />} />
         <Route path="/home/contactus" element={<ContactUspage />} />
         <Route path="/home/filter" element={<FilterPage/>}/>
+        <Route path="/home/apartmentdetail" element={<ApartmentDetail/>}/>
 
         
               </Routes>

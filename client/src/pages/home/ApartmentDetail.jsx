@@ -1,0 +1,143 @@
+import React from "react";
+import room from "../../assets/images/room.jpg";
+import HomeNav from "../../components/home/HomeNav";
+import Footer from "../../components/home/Footer";
+import { Link, useLocation } from "react-router-dom";
+
+
+const ApartmentDetail = ({  }) => {
+    const { state: apartmentData } = useLocation(); // Get additional data from state
+    console.log(apartmentData);
+    return (
+        <>
+        <HomeNav/>
+
+        {/* <!-- section_1 -->  */}
+
+
+
+<div class="  max-w-screen-2xl mx-auto px-4 py-16 lg:py-24 relative bg-white">
+<div className="flex items-center justify-between">
+                <h1 className="text-3xl font-bold text-gray-800 mt-7 mb-3">{apartmentData.name}, MAR</h1>
+                <div className="flex items-center space-x-2">
+                    <i className="uil uil-star text-yellow-400 text-2xl"></i>
+                    <span className="text-gray-500">4.5</span>
+
+                    <span className="text-gray-500"> (24 reviews)</span>
+
+                    <span className="text-gray-500"> | </span>
+
+
+                    <i className="uil uil-share-alt text-gray-500 text-2xl"></i>
+
+                </div>
+            </div>
+    <div class="flex flex-col md:flex-row gap-2">
+        {apartmentData.images && apartmentData.images.map((image, index) => (
+            <>
+                    <div class="flex flex-1 flex-col">
+            <div class="flex flex-1 flex-col">
+                {/* <!-- img_01 -->  */}
+                <img class="object-cover h-full" src={image}  alt=''/>
+            </div>
+        </div>
+        <div class="flex flex-1">
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                {/* <!-- img_02 --> */}
+                <img class="object-cover h-full" src={image} alt=''/>
+              </div>
+              <div>
+                {/* <!-- img_03 --> */}
+                <img class="object-cover h-full" src={image} alt=''/>
+              </div>
+              <div>
+                {/* <!-- img_04 --> */}
+                <img class="object-cover h-full" src={image} alt=''/>
+              </div>
+              <div>
+                {/* <!-- img_05 --> */}
+                <img class="object-cover h-full" src={image} alt=''/>
+              </div>
+            </div>
+        </div>
+        </>
+
+         ))}
+    </div>
+</div>
+
+            <div className="container md:mt-2 mt-16">
+                <div className="md:flex">
+                    <div className="lg:w-2/3 md:w-1/2 md:p-4 px-3 md:ms-[10rem]">
+                        <h4 className="text-2xl font-medium">{apartmentData.address}, Mar</h4>
+
+                        <ul className="py-6 flex items-center list-none">
+                            {apartmentData.characteristics && apartmentData.characteristics.map((characteristic, index) => (
+
+                            <li className="flex items-center lg:me-6 me-4">
+                                <i className="uil uil-compress-arrows lg:text-3xl text-2xl me-2 text-green-600"></i>
+                                <span className="lg:text-xl">{characteristic}</span>
+                            </li>
+                            ))}
+                        </ul>
+
+                        <p className="text-slate-400">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+                        <p className="text-slate-400 mt-4">But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness.</p>
+                    
+                        <div className="w-full leading-[0] border-0 mt-6">
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d39206.002432144705!2d-95.4973981212445!3d29.709510002925988!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8640c16de81f3ca5%3A0xf43e0b60ae539ac9!2sGerald+D.+Hines+Waterwall+Park!5e0!3m2!1sen!2sin!4v1566305861440!5m2!1sen!2sin" style={{border:"0"}} className="w-full h-[500px]" allowfullscreen=""></iframe>
+                        </div>
+                    </div>
+
+                    <div className="lg:w-1/3 md:w-1/2 md:p-4 px-3 mt-8 md:mt-0">
+                    <div class="max-w-md mx-auto mt-10 bg-white shadow-lg rounded-lg overflow-hidden">
+    <div class="text-2xl py-4 px-6 bg-gray-900 text-white text-center font-bold uppercase">
+        Book an Appointment
+    </div>
+    <form class="py-4 px-6" action="" method="POST">
+       
+        <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2" for="date">
+                Date
+            </label>
+            <input
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="date" type="date" placeholder="Select a date"/>
+        </div>
+        <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2" for="time">
+                Time
+            </label>
+            <input
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="time" type="time" placeholder="Select a time"/>
+        </div>
+        
+        <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2" for="message">
+                Message
+            </label>
+            <textarea
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="message" rows="4" placeholder="Enter any additional information"></textarea>
+        </div>
+        <div class="flex items-center justify-center mb-4">
+            <button
+                class="bg-gray-900 text-white py-2 px-4 rounded hover:bg-gray-800 focus:outline-none focus:shadow-outline"
+                type="submit">
+                Book Appointment
+            </button>
+        </div>
+
+    </form>
+</div>
+                    </div>
+                </div>
+            </div>
+            <Footer/>
+        </>
+    );
+}
+
+export default ApartmentDetail;

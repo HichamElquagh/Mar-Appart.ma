@@ -7,6 +7,7 @@ const authenticationMiddleware = require('../../middlewares/authMiddleware');
 
 apartmentRouter.get('/', authenticationMiddleware, apartmentController.getApartments);
 apartmentRouter.get('/search', apartmentController.getApartmentsByCityOrAddress);
+apartmentRouter.get('/filter', apartmentController.filterApartments);
 apartmentRouter.get('/all', apartmentController.getAllApartments);
 apartmentRouter.post('/', authenticationMiddleware,  apartmentController.createApartment);
 apartmentRouter.patch('/:id', apartmentController.updateApartment);

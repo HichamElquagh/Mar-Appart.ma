@@ -1,13 +1,33 @@
-import React from "react";
+import React , {useState} from "react";
 import room from "../../assets/images/room.jpg";
 import HomeNav from "../../components/home/HomeNav";
 import Footer from "../../components/home/Footer";
 import { Link, useLocation } from "react-router-dom";
+import Zoom from 'react-medium-image-zoom'
+import 'react-medium-image-zoom/dist/styles.css'
+import { h } from "@fullcalendar/core/preact";
 
 
 const ApartmentDetail = ({  }) => {
     const { state: apartmentData } = useLocation(); // Get additional data from state
-    console.log(apartmentData);
+
+    const [formData, setFormData] = useState({
+        checkIn: "",
+        checkOut: "",
+        message: ""
+    });
+
+    const handleInputChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+    }
+
+    const handleBook = () => {
+        console.log(formData);
+    }
+
     return (
         <>
         <HomeNav/>
@@ -16,8 +36,8 @@ const ApartmentDetail = ({  }) => {
 
 
 
-<div class="  max-w-screen-2xl mx-auto px-4 py-16 lg:py-24 relative bg-white">
-<div className="flex items-center justify-between">
+    <div class="  max-w-screen-2xl mx-auto px-4 py-16 lg:py-24 relative bg-white">
+            <div className="flex items-center justify-between">
                 <h1 className="text-3xl font-bold text-gray-800 mt-7 mb-3">{apartmentData.name}, MAR</h1>
                 <div className="flex items-center space-x-2">
                     <i className="uil uil-star text-yellow-400 text-2xl"></i>
@@ -32,57 +52,58 @@ const ApartmentDetail = ({  }) => {
 
                 </div>
             </div>
-    <div class="flex flex-col md:flex-row gap-2">
-        {apartmentData.images && apartmentData.images.map((image, index) => (
-            <>
+    <div class="flex flex-col md:flex-row gap-2 md:mx-10">
                     <div class="flex flex-1 flex-col">
             <div class="flex flex-1 flex-col">
                 {/* <!-- img_01 -->  */}
-                <img class="object-cover h-full" src={image}  alt=''/>
+                {/* <Zoom> */}
+                <img class="object-cover h-full rounded-xl" src={apartmentData.images[0]} alt=''/>
+                {/* </Zoom> */}
             </div>
         </div>
         <div class="flex flex-1">
             <div class="grid grid-cols-2 gap-2">
-              <div>
+                {apartmentData.images && apartmentData.images.map((image, index) => (
+                    <div>
                 {/* <!-- img_02 --> */}
-                <img class="object-cover h-full" src={image} alt=''/>
-              </div>
-              <div>
-                {/* <!-- img_03 --> */}
-                <img class="object-cover h-full" src={image} alt=''/>
-              </div>
-              <div>
-                {/* <!-- img_04 --> */}
-                <img class="object-cover h-full" src={image} alt=''/>
-              </div>
-              <div>
-                {/* <!-- img_05 --> */}
-                <img class="object-cover h-full" src={image} alt=''/>
-              </div>
+                            <Zoom
+                            // overlayBgColorEnd='rgba(255, 255, 255, 0.95)'
+                            zoomMargin={30}
+                            wrapperStyle={{ display: 'inline-block' }} // Ajuste le style du conteneur autour de l'image
+                            zoomImageStyle={{ borderRadius: 'none' }} // Ajuste le style de l'image zoomée
+                            >
+
+                        <img class="object-cover h-full rounded-xl" src={image} alt=''/>
+                        </Zoom>
+
+                    </div>
+                ))}
             </div>
         </div>
-        </>
-
-         ))}
     </div>
+
 </div>
 
-            <div className="container md:mt-2 mt-16">
+            <div className="container md:mt-0 mt-16">
                 <div className="md:flex">
                     <div className="lg:w-2/3 md:w-1/2 md:p-4 px-3 md:ms-[10rem]">
                         <h4 className="text-2xl font-medium">{apartmentData.address}, Mar</h4>
 
-                        <ul className="py-6 flex items-center list-none">
-                            {apartmentData.characteristics && apartmentData.characteristics.map((characteristic, index) => (
+                        <ul className="mt-6 box-border flex list-none items-center border-t border-b border-solid border-gray-200 px-0 py-6">
+            {apartmentData.characteristics && apartmentData.characteristics.map((characteristic, index) => (
+          <li className="mr-4 flex items-center text-left">
+            <i className="mr-2 text-2xl text-green-600">
 
-                            <li className="flex items-center lg:me-6 me-4">
-                                <i className="uil uil-compress-arrows lg:text-3xl text-2xl me-2 text-green-600"></i>
-                                <span className="lg:text-xl">{characteristic}</span>
-                            </li>
-                            ))}
-                        </ul>
+              <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" className="h-5 w-5" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="currentColor" d="M10.38 13.08A1 1 0 0 0 10 13H6a1 1 0 0 0 0 2h1.59l-5.3 5.29a1 1 0 0 0 0 1.42a1 1 0 0 0 1.42 0L9 16.41V18a1 1 0 0 0 2 0v-4a1 1 0 0 0-.08-.38a1 1 0 0 0-.54-.54ZM10 5a1 1 0 0 0-1 1v1.59l-5.29-5.3a1 1 0 0 0-1.42 1.42L7.59 9H6a1 1 0 0 0 0 2h4a1 1 0 0 0 .38-.08a1 1 0 0 0 .54-.54A1 1 0 0 0 11 10V6a1 1 0 0 0-1-1Zm3.62 5.92A1 1 0 0 0 14 11h4a1 1 0 0 0 0-2h-1.59l5.3-5.29a1 1 0 1 0-1.42-1.42L15 7.59V6a1 1 0 0 0-2 0v4a1 1 0 0 0 .08.38a1 1 0 0 0 .54.54ZM16.41 15H18a1 1 0 0 0 0-2h-4a1 1 0 0 0-.38.08a1 1 0 0 0-.54.54A1 1 0 0 0 13 14v4a1 1 0 0 0 2 0v-1.59l5.29 5.3a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.42Z" /></svg>
+            </i>
+            <span className="text-sm">{characteristic}</span>
+          </li>
+            ))}
+            </ul>
+        
+                        
 
-                        <p className="text-slate-400">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+                        <p className="text-slate-400">{apartmentData.description}</p>
                         <p className="text-slate-400 mt-4">But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness.</p>
                     
                         <div className="w-full leading-[0] border-0 mt-6">
@@ -92,46 +113,57 @@ const ApartmentDetail = ({  }) => {
 
                     <div className="lg:w-1/3 md:w-1/2 md:p-4 px-3 mt-8 md:mt-0">
                     <div class="max-w-md mx-auto mt-10 bg-white shadow-lg rounded-lg overflow-hidden">
-    <div class="text-2xl py-4 px-6 bg-gray-900 text-white text-center font-bold uppercase">
-        Book an Appointment
-    </div>
-    <form class="py-4 px-6" action="" method="POST">
-       
-        <div class="mb-4">
-            <label class="block text-gray-700 font-bold mb-2" for="date">
-                Date
-            </label>
-            <input
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="date" type="date" placeholder="Select a date"/>
-        </div>
-        <div class="mb-4">
-            <label class="block text-gray-700 font-bold mb-2" for="time">
-                Time
-            </label>
-            <input
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="time" type="time" placeholder="Select a time"/>
-        </div>
-        
-        <div class="mb-4">
-            <label class="block text-gray-700 font-bold mb-2" for="message">
-                Message
-            </label>
-            <textarea
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="message" rows="4" placeholder="Enter any additional information"></textarea>
-        </div>
-        <div class="flex items-center justify-center mb-4">
-            <button
-                class="bg-gray-900 text-white py-2 px-4 rounded hover:bg-gray-800 focus:outline-none focus:shadow-outline"
-                type="submit">
-                Book Appointment
-            </button>
-        </div>
+                        <div class="text-2xl py-4 px-6 bg-gray-900 text-white text-center font-bold uppercase">
+                        Book the apartment
+                        </div>
+                            <form class="py-4 px-6">
+                            
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 font-bold mb-2" for="date">
+                                    checkIn
+                                    </label>
+                                    <input
+                                        name="checkIn"
+                                        onChange={handleInputChange}
+                                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                        id="date" type="date" placeholder="Select a date"/>
+                                </div> 
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 font-bold mb-2" for="date">
+                                    checkOut
+                                    </label>
+                                    <input
+                                        name="checkOut"
+                                        onChange={handleInputChange}
+                                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                        id="date" type="date" placeholder="Select a date"/>
+                                </div>                          
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 font-bold mb-2" for="message">
+                                        Message
+                                    </label>
+                                    <textarea
+                                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                        id="message" rows="4" placeholder="Enter any additional information"></textarea>
+                                </div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <button
+                                        class="bg-gray-900 text-white py-2 px-4 rounded hover:bg-gray-800 focus:outline-none focus:shadow-outline"
+                                        type="button"
+                                        onClick={handleBook}
+                                        >
+                                        Book
+                                    </button>
 
-    </form>
-</div>
+                                    <div
+                                        className="text-gray-700 text-lg font-bold ml-4"
+                                    >
+                                    {apartmentData.price} MAD, per night    
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>

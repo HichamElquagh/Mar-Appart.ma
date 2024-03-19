@@ -46,10 +46,19 @@ const apartmentApi = createApi({
             };
         },
         }),
+        filterApartments: builder.query({
+        query: (data) => {
+            const { numberOfPersons,city, price } = data;
+            console.log("check data",data);
+            return {
+                url: `/apartments/filter?numberOfPersons=${numberOfPersons}&city=${city}&price=${price}`,
+            };
+        },
+        }),
 
     }),
     });
 
 
-export const { useGetAllApartmentsQuery, useGetApartmentsQuery, useGetApartmentQuery, useCreateApartmentMutation, useUpdateApartmentMutation, useDeleteApartmentMutation , useSearchApartmentByCityOrAddressQuery  } = apartmentApi;
+export const { useGetAllApartmentsQuery, useGetApartmentsQuery, useGetApartmentQuery, useCreateApartmentMutation, useUpdateApartmentMutation, useDeleteApartmentMutation , useSearchApartmentByCityOrAddressQuery , useFilterApartmentsQuery  } = apartmentApi;
 export default apartmentApi ;

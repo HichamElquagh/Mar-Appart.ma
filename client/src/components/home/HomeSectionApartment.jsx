@@ -67,7 +67,7 @@ const HomeSectionApartment = ({ searchData }) => {
        className="mb-4 overflow-hidden rounded-xl border text-gray-700 shadow-md duration-500 ease-in-out hover:shadow-xl">
 
       <div className="">
-        <img src={apartment.images[0]} alt="" className="" />
+        <img src={apartment.images[0]} alt="" className="w-screen h-90" />
       </div>
 
       <div className="p-4">

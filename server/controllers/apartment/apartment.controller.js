@@ -2,6 +2,7 @@
 const Apartment = require('../../models/apartment')
 // const City = require('../../models/city')
  const User = require('../../models/user')
+ const Reservation = require('../../models/reservation')
 
 
 // Create a new apartment
@@ -175,6 +176,8 @@ const Apartment = require('../../models/apartment')
                 res.status(500).json({ error: error.message });
             }
         }
+
+
         async filterApartments(req, res) {
             const {numberOfPersons, city,price, } = req.query;
             console.log("City:", city);
@@ -225,6 +228,61 @@ const Apartment = require('../../models/apartment')
                 res.status(500).json({ error: error.message });
             }
         }
+
+        async bookApartment(req, res) {
+            const { checkIn, checkOut , apartmentId } = req.body;
+            const user_id = req.user.id;
+            console.log("User id:", user_id);
+            console.log("Apartment id:", apartmentId);
+            console.log("Start date:", checkIn);
+            console.log("End date:", checkOut);
+        
+            try {
+                const apartment = await Apartment.findById(apartmentId);
+                if (!apartment) {
+                    return res.status(404).json({ error: 'Apartment not found.' });
+                }
+
+                const user = await User.findById(user_id);
+                if (!user) {
+                    return res.status(404).json({ error: 'User not found.' });
+                }
+
+                const checkifBooked = await Reservation.findOne({ apartment: apartmentId })
+                .sort({ createdAt: -1 })
+                .exec();
+                if(checkifBooked.status === "Reserved"){
+                    const minCheckOut = Math.min(...checkifBooked.map(booking => booking.checkOut));
+                    const maxCheckIn = Math.max(...checkifBooked.map(booking => booking.checkIn));
+                    
+                    return res.status(404).json({
+                        error: 'Apartment already booked.',
+                        availableFromDate: minCheckOut,
+                        availableToDate: maxCheckIn
+                    });
+                        }
+
+                console.log("User:", user);
+                const booking = {
+                    apartment: apartment._id,
+                    user: user._id,
+                    checkIn,
+                    checkOut,
+                    totalPrice: apartment.price,
+                    status:"Reserved"
+                };
+                console.log("Booking:", booking);
+                const newBooking = new Reservation(booking);
+                await newBooking.save();
+                res.status(200).json({ message: 'Apartment booked successfully.' });
+            } catch (error) {
+                console.error(error);
+                res.status(500).json({ error: error.message });
+            }
+        }
+
+
+
         
 
         

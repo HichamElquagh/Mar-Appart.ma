@@ -1,19 +1,21 @@
-import React , {useState} from "react";
+import React , {useState , useEffect} from "react";
 import room from "../../assets/images/room.jpg";
 import HomeNav from "../../components/home/HomeNav";
 import Footer from "../../components/home/Footer";
 import { Link, useLocation } from "react-router-dom";
 import Zoom from 'react-medium-image-zoom'
 import 'react-medium-image-zoom/dist/styles.css'
-import { h } from "@fullcalendar/core/preact";
-
+// import { h } from "@fullcalendar/core/preact";
+import {useBookApartmentMutation} from "../../store/api/apartmentQuery";
+import toast from 'react-hot-toast';
 
 const ApartmentDetail = ({  }) => {
     const { state: apartmentData } = useLocation(); // Get additional data from state
-
+    const [bookApartment, { data, error, isLoading }] = useBookApartmentMutation(); 
     const [formData, setFormData] = useState({
         checkIn: "",
         checkOut: "",
+        apartmentId: apartmentData._id,
         message: ""
     });
 
@@ -22,10 +24,21 @@ const ApartmentDetail = ({  }) => {
             ...formData,
             [e.target.name]: e.target.value
         });
+        console.log(formData);
     }
 
     const handleBook = () => {
-        console.log(formData);
+
+        try {
+           const response = bookApartment(formData);
+              console.log(response.data);
+
+        }
+        catch (error) {
+            console.log(error);
+        }
+
+
     }
 
     return (
@@ -124,6 +137,7 @@ const ApartmentDetail = ({  }) => {
                                     </label>
                                     <input
                                         name="checkIn"
+                                        value={formData.checkIn}
                                         onChange={handleInputChange}
                                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                         id="date" type="date" placeholder="Select a date"/>
@@ -134,6 +148,7 @@ const ApartmentDetail = ({  }) => {
                                     </label>
                                     <input
                                         name="checkOut"
+                                        value={formData.checkOut}
                                         onChange={handleInputChange}
                                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                         id="date" type="date" placeholder="Select a date"/>

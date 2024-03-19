@@ -56,9 +56,19 @@ const apartmentApi = createApi({
         },
         }),
 
+        bookApartment: builder.mutation({
+        query: (data) => ({
+            url: '/apartments/book',
+            method: 'POST',
+            body: data,
+        }),
+        }),
+
+
+
     }),
     });
 
 
-export const { useGetAllApartmentsQuery, useGetApartmentsQuery, useGetApartmentQuery, useCreateApartmentMutation, useUpdateApartmentMutation, useDeleteApartmentMutation , useSearchApartmentByCityOrAddressQuery , useFilterApartmentsQuery  } = apartmentApi;
+export const { useGetAllApartmentsQuery, useGetApartmentsQuery, useGetApartmentQuery, useCreateApartmentMutation, useUpdateApartmentMutation, useDeleteApartmentMutation , useSearchApartmentByCityOrAddressQuery , useFilterApartmentsQuery , useBookApartmentMutation  } = apartmentApi;
 export default apartmentApi ;

@@ -11,13 +11,36 @@ import toast from 'react-hot-toast';
 
 const ApartmentDetail = ({  }) => {
     const { state: apartmentData } = useLocation(); // Get additional data from state
-    const [bookApartment, { data, error, isLoading }] = useBookApartmentMutation(); 
+    const [bookApartment, { data, error, isLoading, isError }] = useBookApartmentMutation(); 
     const [formData, setFormData] = useState({
         checkIn: "",
         checkOut: "",
         apartmentId: apartmentData._id,
         message: ""
     });
+
+    useEffect(() => {
+        if (data) {
+            setFormData({
+                checkIn: "",
+                checkOut: "",
+                message: ""
+            });
+            toast.success("Apartment booked successfully");
+        }
+        if (isError) {
+            console.log(error.data.error);
+            toast.error(error.data.error, {
+                autoClose: 5000, // Duration in milliseconds (e.g., 5000ms = 5 seconds)
+              });
+            //     checkIn: "",
+            //     checkOut: "",
+            //     message: ""
+            // });
+        }
+    }, [data, isError]);
+
+
 
     const handleInputChange = (e) => {
         setFormData({
@@ -27,12 +50,10 @@ const ApartmentDetail = ({  }) => {
         console.log(formData);
     }
 
-    const handleBook = () => {
+    const handleBook = async () => {
 
         try {
-           const response = bookApartment(formData);
-              console.log(response.data);
-
+           const response = await bookApartment(formData);
         }
         catch (error) {
             console.log(error);
@@ -79,15 +100,15 @@ const ApartmentDetail = ({  }) => {
                 {apartmentData.images && apartmentData.images.map((image, index) => (
                     <div>
                 {/* <!-- img_02 --> */}
-                            <Zoom
-                            // overlayBgColorEnd='rgba(255, 255, 255, 0.95)'
+                            {/* <Zoom
+                            overlayBgColorStart='rgba(255, 255, 255, 0.95)'
                             zoomMargin={30}
                             wrapperStyle={{ display: 'inline-block' }} // Ajuste le style du conteneur autour de l'image
-                            zoomImageStyle={{ borderRadius: 'none' }} // Ajuste le style de l'image zoomée
-                            >
+                            zoomImageStyle={{ borderRadius: 'none' }}
+                            > */}
 
                         <img class="object-cover h-full rounded-xl" src={image} alt=''/>
-                        </Zoom>
+                        {/* </Zoom> */}
 
                     </div>
                 ))}

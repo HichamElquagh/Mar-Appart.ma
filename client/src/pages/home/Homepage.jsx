@@ -80,7 +80,7 @@ const Homepage = () => {
                 name="city"
                   className="py-3 px-4 me-4 rounded-lg text-gray-500 font-semibold cursor-pointer bg-white appearance-none"
                 >
-                  <option value="all">All cities</option>
+                  <option value="">All cities</option>
                   {cities.map((city) => (
                     <option value={city.city}>{city.city}</option>
                   ))}

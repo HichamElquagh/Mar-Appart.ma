@@ -15,6 +15,7 @@ import ApartmentModal from './components/modals/ApartmentModal';
 import ReservationPage from './pages/home/ReservationPage';
 import ProtectedRoute from './protectedRoutes/ProtectedRoute ';
 import ApartmentDetail from './pages/home/ApartmentDetail';
+import ReservationTable from './components/tables/reservationTable';
 
 
 function App() {
@@ -33,14 +34,15 @@ function App() {
           <Route path="/dashboard/users" element={<UserTable />} />
           <Route path="/dashboard/apartments" element={<ApartmentsTable />} />
           <Route path="/dashboard/calendar" element={<Calendar />} />
+          <Route path="/dashboard/reservation" element={<ReservationTable/>}/>
         </Route>
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} /> 
-        <Route path="/home" element={<Homepage />} />
-        <Route path="/home/reservation" element={<ReservationPage />} />
-        <Route path="/home/contactus" element={<ContactUspage />} />
-        <Route path="/home/filter" element={<FilterPage/>}/>
-        <Route path="/home/apartmentdetail" element={<ApartmentDetail/>}/>
+        <Route path="/" element={<Homepage />} />
+        <Route path="/reservation" element={<ReservationPage />} />
+        <Route path="/contactus" element={<ContactUspage />} />
+        <Route path="/filter" element={<FilterPage/>}/>
+        <Route path="/apartmentdetail" element={<ApartmentDetail/>}/>
 
         
               </Routes>

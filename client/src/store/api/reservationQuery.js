@@ -15,7 +15,7 @@ const reservationApi = createApi({
         query: () => '/reservations',
         }),
         getReservation: builder.query({
-        query: (id) => `/reservations/${id}`,
+        query: () => `/reservations/myreservation`,
         }),
         bookApartment: builder.mutation({
             query: (data) => ({

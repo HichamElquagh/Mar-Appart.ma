@@ -61,18 +61,12 @@ const ApartmentModal = ( {
     }
   }, [showModalForUpdate, apartmentToUpdate]);
 
-  const handleCloseModal = () => {
-    console.log('showModalForUpdate: after ', showModalForUpdate);
+  const handleCloseModal = async () => {
     setShowModal(false);
     setShowModalForUpdate(false);
-        console.log('showModalForUpdate: ', showModalForUpdate);
-    // if (showModalForUpdate === true) {
-    //   console.log('showModalForUpdate: in close ', showModalForUpdate);
-    //   setShowModalForUpdate(false);
-    // }
-    // console.log('showModalForUpdate: ', showModalForUpdate);
-
     resetForm();
+    console.log('showModalForUpdate: after ', showModalForUpdate);
+        console.log('showModalForUpdate: ', showModalForUpdate);
   };
 
   const validate = () => {

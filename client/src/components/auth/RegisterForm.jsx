@@ -27,7 +27,7 @@ const Registerform = () => {
 
         dispatch(setCredentials(response.data.newUser));
 
-        navigate("/home");
+        navigate("/");
       }
     } catch (error) {
       console.error("Failed to register", error); // Gérez les erreurs

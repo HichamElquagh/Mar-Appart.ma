@@ -41,7 +41,7 @@ const handlelogin = async (data) => {
       // dispatch(setCredentials(response.user))
       toast.success(response.data.message)
       dispatch(setCredentials(response.data.user));
-      navigate('/home');
+      navigate('/');
 
     }else if (response.error) {
       toast.error(response.error.data.error);

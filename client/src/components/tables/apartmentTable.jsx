@@ -22,6 +22,8 @@ export default function ApartmentsTable () {
     setShowModal(true);
   }
 
+  console.log("hhhhhhh",showModalForUpdate)
+
   const { data: apartments, error, isLoading, refetch } = useGetApartmentsQuery();
   useEffect(() => { 
     refetch();
@@ -79,7 +81,8 @@ const handleDelete = async (id) => {
                       <div class="inline-flex gap-x-2">
                       <div className=" rounded-lg mb-3 me-3 pt-6">
                         <div className='flex justify-end mt-5'>
-                          <button onClick={() => setShowModal(true)} className="block text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-800 " type="button">
+                          <button onClick={() => {setShowModal(true)
+                            setShowModalForUpdate(false);}} className="block text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-800 " type="button">
                           + Add New Apartment
                           </button>
                         </div>

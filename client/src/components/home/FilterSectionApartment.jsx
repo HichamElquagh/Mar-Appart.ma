@@ -27,7 +27,7 @@ const FilterSectionApartment = ({FilterData}) => {
         // and pass the apartment data as a parameter
       
         // Example using `useNavigate` hook from `react-router-dom`:
-        navigate(`/home/apartmentdetail`, { state: apartment });
+        navigate(`/apartmentdetail`, { state: apartment });
       };
     return (
         <>

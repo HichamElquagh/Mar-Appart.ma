@@ -3,6 +3,8 @@ import { useGetAllApartmentsQuery } from "../../store/api/apartmentQuery";
 import room from "../../assets/images/room.jpg";
 import  {useSearchApartmentByCityOrAddressQuery} from "../../store/api/apartmentQuery";
 import { useNavigate } from "react-router";
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 const HomeSectionApartment = ({ searchData }) => {
   
   
@@ -56,7 +58,11 @@ const HomeSectionApartment = ({ searchData }) => {
   <h1 className="mt-10 text-4xl font-bold text-gray-800">New Listings</h1>
   <div className="mt-10 grid max-w-md grid-cols-1 gap-6 px-2 sm:max-w-lg sm:px-20 md:max-w-screen-xl md:grid-cols-2 md:px-10 lg:grid-cols-3 lg:gap-8">
     {/* <!--property--> */}
-    {isLoading && <p>Loading...</p>}
+    {isLoading && 
+    <Box sx={{ display: 'flex' }}>
+      <CircularProgress />
+    </Box>
+    }
     {apartments && apartments.map((apartment) => (
       
     <button
@@ -67,7 +73,7 @@ const HomeSectionApartment = ({ searchData }) => {
        className="mb-4 overflow-hidden rounded-xl border text-gray-700 shadow-md duration-500 ease-in-out hover:shadow-xl">
 
       <div className="">
-        <img src={apartment.images[0]} alt="" className="w-screen h-90" />
+        <img src={apartment.images[0]} alt="" className="w-screen h-[20rem]" />
       </div>
 
       <div className="p-4">

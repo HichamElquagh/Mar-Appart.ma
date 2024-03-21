@@ -6,7 +6,7 @@ import { Link, useLocation } from "react-router-dom";
 import Zoom from 'react-medium-image-zoom'
 import 'react-medium-image-zoom/dist/styles.css'
 // import { h } from "@fullcalendar/core/preact";
-import {useBookApartmentMutation} from "../../store/api/apartmentQuery";
+import {useBookApartmentMutation} from "../../store/api/reservationQuery";
 import toast from 'react-hot-toast';
 
 const ApartmentDetail = ({  }) => {
@@ -30,13 +30,18 @@ const ApartmentDetail = ({  }) => {
         }
         if (isError) {
             console.log(error.data.error);
-            toast.error(error.data.error, {
-                autoClose: 5000, // Duration in milliseconds (e.g., 5000ms = 5 seconds)
-              });
-            //     checkIn: "",
-            //     checkOut: "",
-            //     message: ""
-            // });
+            toast.error(error.data.error,
+                {
+                    duration: 4000,
+                    position: 'top-right',
+                    style: {
+                        background: '#333',
+                        color: '#fff',
+                }
+            }
+            
+
+                );
         }
     }, [data, isError]);
 

@@ -3,6 +3,7 @@ import authApi from './api/authQuery'
 import apartmentApi from './api/apartmentQuery'
 import userApi from './api/userQuery'
 import authReducer from './slices/userSlice'
+import reservationApi from './api/reservationQuery'
 
 
 
@@ -12,10 +13,11 @@ const store = configureStore({
         [authApi.reducerPath] : authApi.reducer,
         [apartmentApi.reducerPath]: apartmentApi.reducer,
         [userApi.reducerPath]: userApi.reducer,
+         [reservationApi.reducerPath]: reservationApi.reducer,
 
      },
      middleware: (getDefaultMiddleware) =>
-     getDefaultMiddleware().concat(authApi.middleware,apartmentApi.middleware,userApi.middleware),
+     getDefaultMiddleware().concat(authApi.middleware,apartmentApi.middleware,userApi.middleware,reservationApi.middleware),
      
       
     

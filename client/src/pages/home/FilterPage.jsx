@@ -75,7 +75,7 @@ const FilterPage = () => {
                             onChange={handleInputChange}
                             id="Offer"
                                 className="h-12 border border-gray-300 text-gray-900 text-xs font-medium rounded-full block w-full py-2.5 px-4 appearance-none relative focus:outline-none bg-white">
-                                <option selected>Choose a City</option>
+                                <option value="" selected>Choose a City</option>
                                {cities.map((item,index)=>(
                                   
                                     <option value={item.city}>{item.city}</option>

@@ -3,6 +3,8 @@ import React, {useState, useEffect} from 'react';
 import room from "../../assets/images/room.jpg";
 import {useFilterApartmentsQuery} from "../../store/api/apartmentQuery"
 import { useNavigate } from 'react-router';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 
 const FilterSectionApartment = ({FilterData}) => {
@@ -33,15 +35,15 @@ const FilterSectionApartment = ({FilterData}) => {
   {/* <h1 class="mt-10 text-4xl font-bold text-gray-800">New Listings</h1> */}
   <div class="mt-10 grid max-w-md grid-cols-1 gap-6 px-2 sm:max-w-lg sm:px-20 md:max-w-screen-xl md:grid-cols-2 md:px-10 lg:grid-cols-2 lg:gap-8">
     {/* <!--property--> */}
-    {searchLoading && <p>Loading...</p>}
-    {isError && <p>Error: {isError}</p>}
+    {searchLoading && <Box sx={{ display: 'flex' }}><CircularProgress /></Box>}
+    {isError && <p>Error: {searchError}</p>}
     {apartments && apartments.map((apartment) => (
     <button
     type="button"
     onClick={() => handleApartmentClick(apartment)} // Add click handler
     class="mb-4 overflow-hidden rounded-xl border text-gray-700 shadow-md duration-500 ease-in-out hover:shadow-xl">
       <div class="">
-        <img src={apartment.images[0]} alt="" class="w-screen h-90" />
+        <img src={apartment.images[0]} alt="" class="w-screen h-[20rem]" />
       </div>
 
       <div class="p-4">

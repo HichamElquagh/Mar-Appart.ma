@@ -4,6 +4,7 @@ import DashCard from "../dash/DashCard";
 import { useGetApartmentsQuery , useDeleteApartmentMutation } from "../../store/api/apartmentQuery";
 import { RiDeleteBinLine } from "react-icons/ri";
 import toast, { Toaster } from 'react-hot-toast';
+import { Box } from "@mui/material";
 
 
 
@@ -165,6 +166,7 @@ const handleDelete = async (id) => {
                     </thead>
 
                     <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+
                       {apartments && currentItems.map((apartment) => (
                       <tr key={apartment._id}>
                         <td class=" ps-5 size-px whitespace-nowrap">

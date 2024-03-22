@@ -1,4 +1,4 @@
-#  Dockerfile for Node Express Backend
+# Dockerfile for React client
 
 FROM node:18.13-alpine
 
@@ -11,10 +11,10 @@ COPY package*.json ./
 ###  Installing dependencies
 RUN npm install
 
-# Copy app source code
+# copy local files to app folder
 COPY . .
 
 # Exports
-EXPOSE 3000
+EXPOSE 5173
 
-CMD ["npm","run","devstart"]
+CMD ["npm","run","dev"]

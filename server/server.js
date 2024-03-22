@@ -19,6 +19,9 @@ app.use(bodyParser.json());
 
 
 connectDatabase();
+
+
+
 app.use(cors(
   {
     credentials: true,
@@ -28,7 +31,10 @@ app.use(cors(
 
 
 
-
+  app.use('/auth', authRouter);
+  app.use('/apartments', apartmentRouter );
+  app.use('/users', userRouter);
+  app.use('/reservations', reservationRouter);
 
 
 
@@ -39,12 +45,11 @@ app.use((err, req, res, next) => {
   res.status(500).send('Internal Server Error');
 });
 
-app.use('/auth', authRouter);
-app.use('/apartments', apartmentRouter );
-app.use('/users', userRouter);
-app.use('/reservations', reservationRouter);
+
 // Start the server
 const port = process.env.PORT || 3000; // Use environment variable or default port 3000
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
+
+module.exports = server;

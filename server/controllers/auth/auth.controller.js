@@ -30,7 +30,6 @@ class AuthController {
                 phone: newUser.phone,
                 role: newUser.role
             };
-            console.log(payload);
 
             await newUser.save();
             const accessToken = TokenGenerator.generateAccessToken(payload);
@@ -48,7 +47,7 @@ class AuthController {
             
             
         } catch (error) {
-            console.error(error);
+
             res.status(500).json({ error: error.message });
         }
     }
@@ -89,7 +88,6 @@ class AuthController {
   }
 
     async logoutUser(req, res) {
-        console.log('logout');
         res.clearCookie('accessToken', ).status(200).json({ message: 'Logout successful.' });
     }
 

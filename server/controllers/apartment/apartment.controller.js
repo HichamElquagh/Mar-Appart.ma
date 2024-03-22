@@ -18,7 +18,6 @@ const Apartment = require('../../models/apartment')
 
      async createApartment(req, res) {
          const { name, images, city, address, price, description, numberOfPersons, space, characteristics, owner } = req.body;
-         console.log(req.user.id);
          const user_id = req.user.id;
          try {
              const newApartment = new Apartment({
@@ -42,7 +41,6 @@ const Apartment = require('../../models/apartment')
 
              }
          } catch (error) {
-             console.error(error);
              res.status(500).json({ error: error.message });
          }
      }
@@ -54,7 +52,6 @@ const Apartment = require('../../models/apartment')
                 // console.log(apartments)
                 res.status(200).json(apartments);
             } catch (error) {
-                console.error(error);
                 res.status(500).json({ error: error.message });
             }
         }else{
@@ -63,24 +60,18 @@ const Apartment = require('../../models/apartment')
                     { owner: req.user.id }
 
              );
-             console.log(apartments)
              res.status(200).json(apartments);
          } catch (error) {
-             console.error(error);
              res.status(500).json({ error: error.message });
          }
      }
     }
 
      async getAllApartments(req, res) {
-
-
             try {
                 const apartments = await Apartment.find();
-                // console.log(apartments)
                 res.status(200).json(apartments);
             } catch (error) {
-                console.error(error);
                 res.status(500).json({ error: error.message });
             }
         }
@@ -102,7 +93,7 @@ const Apartment = require('../../models/apartment')
 
      async updateApartment(req, res) {
          const { id } = req.params;
-         const { name, images, city, address, price, description, numberOfPersons, space, characteristics, owner } = req.body;
+         const { name, images, city, address, price, description, numberOfPersons, space, characteristics} = req.body;
          console.log(req.body);
          try {
              const apartment = await Apartment.findByIdAndUpdate(id, {
@@ -137,15 +128,15 @@ const Apartment = require('../../models/apartment')
                 res.status(200).json({ message: 'Apartment deleted successfully.' });
             }
             catch (error) {
-                console.error(error);
+                // console.error(error);
                 res.status(500).json({ error: error.message });
             }
         }
 
         async  getApartmentsByCityOrAddress(req, res) {
             const { address, city } = req.query;
-            console.log("City:", city);
-            console.log("Address:", address);
+            // console.log("City:", city);
+            // console.log("Address:", address);
         
             try {
                 let query = {};
@@ -172,7 +163,7 @@ const Apartment = require('../../models/apartment')
         
                 res.status(200).json(apartments);
             } catch (error) {
-                console.error(error);
+                // console.error(error);
                 res.status(500).json({ error: error.message });
             }
         }
@@ -180,9 +171,9 @@ const Apartment = require('../../models/apartment')
 
         async filterApartments(req, res) {
             const {numberOfPersons, city,price, } = req.query;
-            console.log("City:", city);
-            console.log("Price:", price);
-            console.log("Number of persons:", numberOfPersons);        
+            // console.log("City:", city);
+            // console.log("Price:", price);
+            // console.log("Number of persons:", numberOfPersons);        
             try {
                 let query = {};
                 if (city) {
@@ -208,7 +199,7 @@ const Apartment = require('../../models/apartment')
                 if (numberOfPersons) {
                     if (typeof numberOfPersons === "string") {
                         const Persons = Number(numberOfPersons);
-                        console.log("Persons:", typeof Persons);
+                        // console.log("Persons:", typeof Persons);
                         query.numberOfPersons =  Persons ;
                     } else {
                         return res.status(400).json({ error: 'Number of persons must be a string.' });
@@ -224,7 +215,7 @@ const Apartment = require('../../models/apartment')
         
                 res.status(200).json(apartments);
             } catch (error) {
-                console.error(error);
+                // console.error(error);
                 res.status(500).json({ error: error.message });
             }
         }

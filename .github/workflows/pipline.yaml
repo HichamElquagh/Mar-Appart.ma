@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+        cd client
+        npm install
+        cd server
+        npm install
+
+    - name: Build React app
+      run: |
+        cd frontend
+        npm run dev
+
+    - name: Run Express server
+      run: |
+        cd server
+        npm run devstart 
+
+    - name: Run tests
+      run: |
+        cd server
+        npm test

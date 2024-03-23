@@ -20,7 +20,7 @@ jobs:
       - name: Install dependencies (server)
         run: |
           cd server 
-          npm ci 
+          npm i 
 
       - name: Run tests
         run: |

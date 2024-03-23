@@ -1,4 +1,4 @@
- import React, { useState } from 'react';
+ import React, { useEffect, useState } from 'react';
  import VideoBackground from '../home/VideoBackground';
  import logo from '../../assets/images/logo-black.png';
  import {useLoginMutation} from '../../store/api/authQuery';
@@ -7,6 +7,7 @@
 import toast from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 import { useForm } from "react-hook-form";
+import { Link } from 'react-router-dom';
 
 
 
@@ -30,6 +31,11 @@ const LoginForm = () => {
     password: ''
   });
 
+  useEffect(() => {
+    if (isError) {
+      toast.error(error.data.error);
+    }
+  }, [isError]);
 
 
 const handlelogin = async (data) => {
@@ -43,8 +49,6 @@ const handlelogin = async (data) => {
       dispatch(setCredentials(response.data.user));
       navigate('/');
 
-    }else if (response.error) {
-      toast.error(response.error.data.error);
     }
   }
   catch (error) {
@@ -128,8 +132,8 @@ const handlelogin = async (data) => {
           </div>
         </button>
 
-    <p className="mt-8">Need an account? <a href="#" className="text-blue-500 hover:text-blue-700 font-semibold">Create an
-            account</a></p>
+    <p className="mt-8">Need an account? <Link to={'/register'} className="text-blue-500 hover:text-blue-700 font-semibold">Create an
+            account</Link></p>
 
   </div>
 </div>

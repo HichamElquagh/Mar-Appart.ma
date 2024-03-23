@@ -1,4 +1,4 @@
-import React from "react";
+import React , {useEffect} from "react";
 import { useForm } from "react-hook-form";
 import VideoBackground from "../home/VideoBackground";
 import logo from "../../assets/images/logo-black.png";
@@ -6,7 +6,7 @@ import { useRegisterMutation } from "../../store/api/authQuery";
 import { setCredentials } from "../../store/slices/userSlice";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-
+import { toast } from "react-hot-toast";
 const Registerform = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -18,6 +18,12 @@ const Registerform = () => {
   } = useForm();
   const [registerMutation, { isLoading, isError, error }] =
     useRegisterMutation();
+
+    useEffect(() => {
+      if (isError) {
+        toast.error(error.data.error);
+      }
+    }, [isError]);
 
   const handleRegister = async (data) => {
     try {
@@ -120,7 +126,6 @@ const Registerform = () => {
                   type="password"
                   name="confirm_password"
                   placeholder="Confirm Password"
-                  minLength={6}
                   className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
                   {...register("confirm_password", {
                     required: "Confirm password is required",

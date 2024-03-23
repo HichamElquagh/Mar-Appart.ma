@@ -16,6 +16,7 @@ import ReservationPage from './pages/home/ReservationPage';
 import ProtectedRoute from './protectedRoutes/ProtectedRoute ';
 import ApartmentDetail from './pages/home/ApartmentDetail';
 import ReservationTable from './components/tables/reservationTable';
+import DashCard from './components/dash/DashCard';
 
 
 function App() {
@@ -29,7 +30,7 @@ function App() {
     
       <Routes>
         <Route path="/dashboard" element={ <ProtectedRoute><Dash /></ProtectedRoute>} >
-        <Route path="/dashboard/" element={<UserTable />} />
+        <Route path="/dashboard/" element={ <DashCard />} />
         <Route path="/dashboard/profile" element={<DashProfile />} />
           <Route path="/dashboard/users" element={<UserTable />} />
           <Route path="/dashboard/apartments" element={<ApartmentsTable />} />

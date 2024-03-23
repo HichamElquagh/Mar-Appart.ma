@@ -14,6 +14,10 @@ class AuthController {
             if (existingUser) {
                 return res.status(409).json({ error: 'Username already exists.' });
             }
+            const existingPhone = await User.findOne({ phone });
+            if (existingPhone) {
+                return res.status(409).json({ error: 'phone already exists.' });
+            }
 
             const hashedPassword = await bcrypt.hash(password, 10);
 

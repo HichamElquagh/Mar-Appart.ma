@@ -60,26 +60,26 @@ const handleDelete = async (id) => {
   
       <DashCard/>
         {/* // <!-- Table Section --> */}
-        <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+        <div className="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
           {/* <!-- Card --> */}
-          <div class="flex flex-col">
-            <div class="-m-1.5 overflow-x-auto">
-              <div class="p-1.5 min-w-full inline-block align-middle">
-                <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden dark:bg-slate-900 dark:border-gray-700">
+          <div className="flex flex-col">
+            <div className="-m-1.5 overflow-x-auto">
+              <div className="p-1.5 min-w-full inline-block align-middle">
+                <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden dark:bg-slate-900 dark:border-gray-700">
                   {/* <!-- Header --> */}
-                  <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-gray-700">
+                  <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-gray-700">
                     <div>
-                      <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">
+                      <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
                         APARTMENT
                       </h2>
-                      <p class="text-sm text-gray-600 dark:text-gray-400">
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
                         Add apartment, edit and more.
                       </p>
                     </div>
         
                     <div>
-                      <div class="inline-flex gap-x-2">
-                      <div className=" rounded-lg mb-3 me-3 pt-6">
+                      <div className="inline-flex gap-x-2">
+                      <div classNameName=" rounded-lg mb-3 me-3 pt-6">
                         <div className='flex justify-end mt-5'>
                           <button onClick={() => {setShowModal(true)
                             setShowModalForUpdate(false);}} className="block text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-800 " type="button">
@@ -94,73 +94,73 @@ const handleDelete = async (id) => {
                   {/* <!-- End Header --> */}
         
                   {/* <!-- Table --> */}
-                  <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                    <thead class="bg-gray-50 dark:bg-slate-800">
+                  <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                    <thead className="bg-gray-50 dark:bg-slate-800">
                       <tr>
-                        <th scope="col" class="ps-6 lg:ps-3 xl:ps-6 pe-6 py-3 text-start">
-                          <div class="flex items-center gap-x-2">
-                            <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200"> Name </span>
+                        <th scope="col" className="ps-6 lg:ps-3 xl:ps-6 pe-6 py-3 text-start">
+                          <div className="flex items-center gap-x-2">
+                            <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200"> Name </span>
                           </div>
                         </th>
-                        <th scope="col" class="px-6 py-3 text-start">
-                          <div class="flex items-center gap-x-2">
-                            <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
+                        <th scope="col" className="px-6 py-3 text-start">
+                          <div className="flex items-center gap-x-2">
+                            <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
                               City
                             </span>
                           </div>
                         </th>
-                        <th scope="col" class="px-6 py-3 text-start">
-                          <div class="flex items-center gap-x-2">
-                            <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
+                        <th scope="col" className="px-6 py-3 text-start">
+                          <div className="flex items-center gap-x-2">
+                            <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
                               Address
                             </span>
                           </div>
                         </th>
-                        <th scope="col" class="px-6 py-3 text-start">
-                          <div class="flex items-center gap-x-2">
-                            <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
+                        <th scope="col" className="px-6 py-3 text-start">
+                          <div className="flex items-center gap-x-2">
+                            <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
                               Price
                             </span>
                           </div>
                         </th>
-                        <th scope="col" class="px-6 py-3 text-start">
-                          <div class="flex items-center gap-x-2">
-                            <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
+                        <th scope="col" className="px-6 py-3 text-start">
+                          <div className="flex items-center gap-x-2">
+                            <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
                               Description
                             </span>
                           </div>
                         </th>
-                        <th scope="col" class="px-6 py-3 text-start">
-                          <div class="flex items-center gap-x-2">
-                            <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
+                        <th scope="col" className="px-6 py-3 text-start">
+                          <div className="flex items-center gap-x-2">
+                            <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
                               Number of Persons
                             </span>
                           </div>
                         </th>
-                        <th scope="col" class="px-6 py-3 text-start">
-                          <div class="flex items-center gap-x-2">
-                            <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
+                        <th scope="col" className="px-6 py-3 text-start">
+                          <div className="flex items-center gap-x-2">
+                            <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
                               Space
                             </span>
                           </div>
                         </th>
-                        <th scope="col" class="px-6 py-3 text-start">
-                          <div class="flex items-center gap-x-2">
-                            <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
+                        <th scope="col" className="px-6 py-3 text-start">
+                          <div className="flex items-center gap-x-2">
+                            <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
                               Characteristics
                             </span>
                           </div>
                         </th>
-                        <th scope="col" class="px-6 py-3 text-start">
-                          <div class="flex items-center gap-x-2">
-                            <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
+                        <th scope="col" className="px-6 py-3 text-start">
+                          <div className="flex items-center gap-x-2">
+                            <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
                               Details
                             </span>
                           </div>
                         </th>
-                        <th scope="col" class="px-6 py-3 text-start">
-                          <div class="flex items-center gap-x-2">
-                            <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
+                        <th scope="col" className="px-6 py-3 text-start">
+                          <div className="flex items-center gap-x-2">
+                            <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
                               
                             </span>
                           </div>
@@ -168,73 +168,73 @@ const handleDelete = async (id) => {
                       </tr>
                     </thead>
 
-                    <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                    <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
 
                       {apartments && currentItems.map((apartment) => (
                       <tr key={apartment._id}>
-                        <td class=" ps-5 size-px whitespace-nowrap">
-                          <div class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
-                            <div class="flex items-center gap-x-3">
-                              <img class="inline-block size-[70px] rounded" src={apartment.images[0]} alt="Apartment Image"/>
-                              <div class="grow">
-                                <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200">{apartment.name}</span>
+                        <td className=" ps-5 size-px whitespace-nowrap">
+                          <div className="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
+                            <div className="flex items-center gap-x-3">
+                              <img className="inline-block size-[70px] rounded" src={apartment.images[0]} alt="Apartment Image"/>
+                              <div className="grow">
+                                <span className="block text-sm font-semibold text-gray-800 dark:text-gray-200">{apartment.name}</span>
                               </div>
                             </div>
                           </div>
                         </td>
-                        <td class="size-px whitespace-nowrap">
-                          <div class="px-6 py-3">
-                            <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200">{apartment.city}</span>
+                        <td className="size-px whitespace-nowrap">
+                          <div className="px-6 py-3">
+                            <span className="block text-sm font-semibold text-gray-800 dark:text-gray-200">{apartment.city}</span>
                           </div>
                         </td>
-                        <td class="size-px whitespace-nowrap">
-                          <div class="px-6 py-3">
-                            <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200">{apartment.address}</span>
+                        <td className="size-px whitespace-nowrap">
+                          <div className="px-6 py-3">
+                            <span className="block text-sm font-semibold text-gray-800 dark:text-gray-200">{apartment.address}</span>
                           </div>
                         </td>
-                        <td class="size-px whitespace-nowrap">
-                          <div class="px-6 py-3">
-                            <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200">{apartment.price}</span>
+                        <td className="size-px whitespace-nowrap">
+                          <div className="px-6 py-3">
+                            <span className="block text-sm font-semibold text-gray-800 dark:text-gray-200">{apartment.price}</span>
                           </div>
                         </td>
-                        <td class="size-px whitespace-nowrap">
-                          <div class="px-6 py-3">
-                            <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200">{apartment.description}</span>
+                        <td className="size-px whitespace-nowrap">
+                          <div className="text-xs px-6 py-3">
+                            <span className="block text-sm font-semibold text-gray-800 dark:text-gray-200">{apartment.description}</span>
                           </div>
                         </td>
-                        <td class="size-px whitespace-nowrap">
-                          <div class="px-6 py-3">
-                            <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200">{apartment.numberOfPersons}</span>
+                        <td className="size-px whitespace-nowrap">
+                          <div className="px-6 py-3">
+                            <span className="block text-sm font-semibold text-gray-800 dark:text-gray-200">{apartment.numberOfPersons}</span>
                           </div>
                         </td>
-                        <td class="size-px whitespace-nowrap">
-                          <div class="px-6 py-3">
-                            <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200">{apartment.space}</span>
+                        <td className="size-px whitespace-nowrap">
+                          <div className="px-6 py-3">
+                            <span className="block text-sm font-semibold text-gray-800 dark:text-gray-200">{apartment.space}</span>
                           </div>
                         </td>
-                        <td class="size-px whitespace-nowrap">
-                          <div class="px-6 py-3">
-                            <ul class="list-disc list-inside text-sm font-semibold text-gray-800 dark:text-gray-200">
+                        <td className="size-px whitespace-nowrap">
+                          <div className="px-6 py-3">
+                            <ul className="list-disc list-inside text-sm font-semibold text-gray-800 dark:text-gray-200">
                               {apartment.characteristics.map((characteristic, index) => (
                                 <li key={index}>{characteristic}</li>
                               ))}
                             </ul>
                           </div>
                         </td>
-                        <td class="size-px whitespace-nowrap">
-                          <div class="px-6 py-1.5">
+                        <td className="size-px whitespace-nowrap">
+                          <div className="px-6 py-1.5">
                             <button
                             onClick={() => handleUpdate(apartment)}
-                            class="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                            className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
                               Edit
                             </button>
                           </div>
                         </td>
-                        <td class="size-px whitespace-nowrap">
-                          <div class="px-6 py-1.5">
+                        <td className="size-px whitespace-nowrap">
+                          <div className="px-6 py-1.5">
                             <button
                             onClick={() => handleDelete(apartment._id)}
-                            class="inline-flex items-center gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                            className="inline-flex items-center gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
                               <RiDeleteBinLine />
                             </button>
                           </div>

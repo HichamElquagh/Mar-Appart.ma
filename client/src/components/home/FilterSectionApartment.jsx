@@ -5,22 +5,24 @@ import {useFilterApartmentsQuery} from "../../store/api/apartmentQuery"
 import { useNavigate } from 'react-router';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
-
+import { toast } from 'react-hot-toast';
 
 const FilterSectionApartment = ({FilterData}) => {
     const navigate = useNavigate();
     const [apartments, setApartments] = useState([]);
     const { data: FilterResults, error: searchError, isLoading: searchLoading ,isError} = useFilterApartmentsQuery(FilterData);
-    if (searchError) {
-        console.log(searchError);
-    }
+
     useEffect(() => {
         if (FilterResults) {
+          console.log("FilterResults",FilterResults);
             setApartments(FilterResults);
+        }
+        if (searchError) {
+          toast.error(searchError.data.error);
         }
     }
 
-    , [FilterResults]);
+    , [FilterResults, searchError]);
 
     const handleApartmentClick = (apartment) => {
         // Use a preferred routing method to navigate to the detail page
@@ -36,7 +38,6 @@ const FilterSectionApartment = ({FilterData}) => {
   <div class="mt-10 grid max-w-md grid-cols-1 gap-6 px-2 sm:max-w-lg sm:px-20 md:max-w-screen-xl md:grid-cols-2 md:px-10 lg:grid-cols-2 lg:gap-8">
     {/* <!--property--> */}
     {searchLoading && <Box sx={{ display: 'flex' }}><CircularProgress /></Box>}
-    {isError && <p>Error: {searchError}</p>}
     {apartments && apartments.map((apartment) => (
     <button
     type="button"

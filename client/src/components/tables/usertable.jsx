@@ -1,6 +1,6 @@
 import React from "react";
 import DashCard from "../dash/DashCard";
-import {useGetUsersQuery , useDeleteUserMutation} from "../../store/api/userQuery";
+import {useGetUsersQuery , useUpdateUserMutation ,useDeleteUserMutation} from "../../store/api/userQuery";
 import toast from "react-hot-toast";
 import { RiDeleteBinLine } from "react-icons/ri";
 
@@ -14,6 +14,18 @@ const UserTable = () => {
         refetch();
         toast.success('User deleted successfully');
     }
+
+    const [updateUser] = useUpdateUserMutation();
+
+    const handleChange = async (e) => {
+        const { name, value } = e.target;
+
+        await updateUser({[name]: value });
+        refetch();
+        toast.success('User role updated successfully');
+    }
+
+    
 
     
     
@@ -116,7 +128,15 @@ const UserTable = () => {
                 </td>
                 <td className="h-px w-72 whitespace-nowrap">
                   <div className="px-6 py-3">
-                    <span className="block text-sm font-semibold text-gray-800 dark:text-gray-200">{user.role}</span>
+                    <select  name="role"
+                    value={user.role}
+                    onChange={handleChange}
+
+                    className="block w-full py-2 px-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:border-gray-700 dark:focus:ring-gray-600 dark:focus:border-gray-600"
+                    >
+                      <option value="admin">Admin</option>
+                      <option value="user">User</option>
+                    </select>
                   </div>
                 </td>
                 <td className="size-px whitespace-nowrap">

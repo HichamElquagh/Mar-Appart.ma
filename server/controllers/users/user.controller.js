@@ -6,7 +6,7 @@ class UserController {
     async getUsers(req, res) {
         try {
             console.log('getUsers');
-            const users = await User.find()
+            const users = await User.find({role: { $ne: 'admin' } })
             res.status(200).json(users)
         } catch (error) {
             console.error(error)
@@ -37,32 +37,16 @@ class UserController {
    
 
     async updateUser(req, res) {
-        const  id  = req.user.id
-        const { image , email, username,phone } = req.body
+        const user_id = req.user.id
+        const { role } = req.body
+        console.log('role',role)
+        return
         
         try {
-            const updateUser = {
-                image,
-                email,
-                username,
-                phone
-            }
-            const user = await User.find({email: email})
-            const userphone = await User.find({phone:phone})
-            if (user.email === email) {
-                res.json({
-                    messageValid : 'this email is been used'
-                })
-                
-            }if (userphone.phone === phone) {
-                res.json({
-                    messageValid : 'this phone is been used'
-                })
-            } else {
-                const updatedUser = await User.findByIdAndUpdate(id, updateUser , { new: true })
+                const updatedUser = await User.findByIdAndUpdate(user_id,{ role }, { new: true })
                 res.status(200).json({ message: 'User updated successfully', updatedUser })
                 
-            }
+            
             
         } catch (error) {
             console.error(error)

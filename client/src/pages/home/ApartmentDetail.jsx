@@ -76,7 +76,7 @@ const ApartmentDetail = ({  }) => {
 
 
     <div class="  max-w-screen-2xl mx-auto px-4 py-16 lg:py-24 relative bg-white">
-            <div className="flex items-center justify-between">
+            <div className="mx-10 flex items-center justify-between">
                 <h1 className="text-3xl font-bold text-gray-800 mt-7 mb-3">{apartmentData.name}, MAR</h1>
                 <div className="flex items-center space-x-2">
                     <i className="uil uil-star text-yellow-400 text-2xl"></i>
@@ -93,10 +93,14 @@ const ApartmentDetail = ({  }) => {
             </div>
     <div class="flex flex-col md:flex-row gap-2 md:mx-10">
                     <div class="flex flex-1 flex-col">
-            <div class="flex flex-1 flex-col">
+            <div class="flex flex-1 flex-col ">
                 {/* <!-- img_01 -->  */}
                 {/* <Zoom> */}
-                <img class="object-cover h-full rounded-xl" src={apartmentData.images[0]} alt=''/>
+                <img class="object-cover  h-[40rem] rounded-xl" src={apartmentData.images[0]} alt=''/>
+                <img class="object-cover mt-2 h-[40rem] rounded-xl" src={apartmentData.images[1]} alt=''/>
+                <img class="object-cover mt-2 h-[40rem] rounded-xl" src={apartmentData.images[2]} alt=''/>
+
+
                 {/* </Zoom> */}
             </div>
         </div>

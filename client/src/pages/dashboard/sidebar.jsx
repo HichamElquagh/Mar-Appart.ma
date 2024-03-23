@@ -4,10 +4,13 @@ import UserTable from '../../components/tables/usertable';
 import logo from "../../assets/images/logo-no-background.png";
 import DashNav from '../../components/dash/DahsNav';
 import { Link, Outlet } from 'react-router-dom';
-
+import { getUserInfo } from '../../store/slices/userSlice';
+import { useSelector } from 'react-redux';
 
 
 const Dash = () => {
+
+  const user = useSelector(getUserInfo);
 
 
 
@@ -39,13 +42,15 @@ const Dash = () => {
             Apartement
           </button>
         </Link>
-
+         {
+          user.role === 'admin' &&
         <Link to={'/dashboard/users'} class="hs-accordion" id="users-accordion">
           <button type="button" class="hs-accordion-toggle w-full text-start flex items-center gap-x-3.5 py-2 px-2.5 hs-accordion-active:text-blue-600 hs-accordion-active:hover:bg-transparent text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-900 dark:text-slate-400 dark:hover:text-slate-300 dark:hs-accordion-active:text-white dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
             <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             Users
           </button>
         </Link>
+        }
 
         <Link to={'/'} class="hs-accordion" id="users-accordion">
           <button type="button" class="hs-accordion-toggle w-full text-start flex items-center gap-x-3.5 py-2 px-2.5 hs-accordion-active:text-blue-600 hs-accordion-active:hover:bg-transparent text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-900 dark:text-slate-400 dark:hover:text-slate-300 dark:hs-accordion-active:text-white dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
@@ -53,7 +58,7 @@ const Dash = () => {
             Home
           </button>
         </Link>
-
+        
      
 
         <Link to={'/dashboard/profile'} class="hs-accordion" id="account-accordion">

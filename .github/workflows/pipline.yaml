@@ -1,39 +1,26 @@
-name: CI
+name: CI/CD Pipeline
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  build-and-test:
+    runs-on: ubuntu-latest  # Or the desired runner OS
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - uses: actions/checkout@v3  # Checkout your code
 
-    - name: Install dependencies
-      run: |
-        cd client
-        npm install
-        cd server
-        npm install
+      - name: Use Node.js 
+        uses: actions/setup-node@v3
+        with:
+          node-version:  "20.11.0"  # Adjust if needed
 
-    - name: Build React app
-      run: |
-        cd frontend
-        npm run dev
+      - name: Install dependencies
+        cd: server
+        run: npm install  # Or yarn install
 
-    - name: Run Express server
-      run: |
-        cd server
-        npm run devstart 
-
-    - name: Run tests
-      run: |
-        cd server
-        npm test
+      - name: Run tests
+        cd: server
+        # Run tests
+        run: npm test  # Or yarn test

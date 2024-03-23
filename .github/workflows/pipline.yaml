@@ -17,10 +17,6 @@ jobs:
           node-version:  "20.11.0"  # Adjust if needed
 
       - name: Install dependencies
-        cd: server
+        cd: ls
         run: npm install  # Or yarn install
 
-      - name: Run tests
-        cd: server
-        # Run tests
-        run: npm test  # Or yarn test

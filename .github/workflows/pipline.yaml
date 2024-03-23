@@ -1,22 +1,29 @@
-name: CI/CD Pipeline
+name: Wonderwave CI/CD
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      
+main
 
 jobs:
-  build-and-test:
-    runs-on: ubuntu-latest  # Or the desired runner OS
+  build:
+    runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3  # Checkout your code
+      
+name: Checkout repository
+      uses: actions/checkout@v2
 
-      - name: Use Node.js 
-        uses: actions/setup-node@v3
-        with:
-          node-version:  "20.11.0"  # Adjust if needed
+      
+name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: "20.11.0"
 
-      - name: Install dependencies
-        cd: ls
-        run: npm install  # Or yarn install
-
+      
+name: Install dependencies
+       run : |
+        cd server
+        npm install
+      

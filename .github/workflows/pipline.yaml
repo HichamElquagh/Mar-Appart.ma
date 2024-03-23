@@ -21,6 +21,6 @@ jobs:
         run: cd server && npm install  # Install dependencies in the server directory
 
       - name: Run tests
-        run: npm test  # Or yarn test (replace if you use yarn)
+        run: cd server && npm test  # Or yarn test (replace if you use yarn)
 
 

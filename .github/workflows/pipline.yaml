@@ -22,4 +22,5 @@ jobs:
           cd server 
           npm install 
           npm install --save-dev jest
+          export PATH=$PATH:$(npm bin)
           npm test # Install dependencies in the server directory

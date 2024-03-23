@@ -17,10 +17,8 @@ jobs:
         with:
           node-version: "20.11.0"
 
-      - name: Install dependencies (server)
-        run: ls  # Install dependencies in the server directory
-
-      # - name: Run tests
-      #   run: cd server && npm test  # Or yarn test (replace if you use yarn)
+      - name: Install dependencies (server) && Run tests
+        run: cd server && npm install && npm test # Install dependencies in the server directory
+        
 
 

@@ -1,26 +1,28 @@
-name: Wonderwave CI/CD  # Descriptive and specific name
+name: CI
 
 on:
-  push:  # Trigger on push events
-    branches:  # Only run for pushes to
-      - main  # The 'main' branch (adjust if needed)
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  build-and-test:  # Combined name for clarity
-    runs-on: ubuntu-latest  # Or the desired runner OS
+  test:
+    runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3  # Checkout your code
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-      - name: Use Node.js 20  # Adjust if needed for project compatibility
-        uses: actions/setup-node@v3
+      - name: Use Node.js 20
+        uses: actions/setup-node@v2
         with:
           node-version: "20.11.0"
 
-      - name: Install dependencies (server) && Run tests
-        run: cd server && npm install  # Install dependencies in the server directory
+      - name: Install Dependencies
+        run: npm install
 
-      - name: Run tests
-        run: cd server && npm test  # Or yarn test (replace if you use yarn)
-
-
+      - name: Run Tests
+        run: npm test

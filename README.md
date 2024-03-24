@@ -111,14 +111,24 @@ npm install
 ````bash
 cd ..
 cd server
-npm start
+npm run devstart
 ````
 2.Démarrez le client front-end :
 ````bash
 cd ..
 cd client
-npm start
+npm run dev
 ````
+### Testing 
+````bash
+cd ..
+cd server
+npm test
+
+
+
+
+
 
 
 

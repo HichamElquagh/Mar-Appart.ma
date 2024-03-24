@@ -21,11 +21,6 @@ const ApartmentDetail = ({  }) => {
 
     useEffect(() => {
         if (data) {
-            setFormData({
-                checkIn: "",
-                checkOut: "",
-                message: ""
-            });
             toast.success("Apartment booked successfully");
         }
         if (isError) {

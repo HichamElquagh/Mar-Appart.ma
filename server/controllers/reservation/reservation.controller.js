@@ -142,7 +142,7 @@ class ReservationController {
         const user_id = req.user.id;
         if (req.user.role === 'admin') {
             try {
-                const reservations = await Reservation.find().populate('apartment', 'name location price city').populate('user', 'username email phone image');
+                const reservations = await Reservation.find().populate('apartment', 'name address price city images').populate('user', 'username email phone image');
                 res.status(200).json(reservations);
             } catch (error) {
                 console.error(error);
@@ -154,7 +154,7 @@ class ReservationController {
                 const myApartmentsIds = myApartments.map((apartment) => apartment._id);
                 const myApartmentsReservation = await Reservation.find({
                     apartment: { $in: myApartmentsIds },
-                 }).populate('User', 'name email phone').populate('Apartment', 'name location price city')
+                 }).populate('apartment', 'name address price city images').populate('user', 'username email phone image');
                  ;
                 res.status(200).json(myApartmentsReservation);
             } catch (error) {
@@ -167,7 +167,14 @@ class ReservationController {
     async getReservation(req, res) {
         const user_id = req.user.id;
         try {
-            const reservation = await Reservation.find({ user: user_id }).populate('apartment', 'name location price city images');
+            const reservation = await Reservation.find({ user: user_id }).populate({
+                path: 'apartment',
+                select: 'name location price city images owner',
+                populate: {
+                    path: 'owner',
+                    select: 'username phone'
+                }
+            });
             if (!reservation) {
                 return res.status(404).json({ error: 'Reservation not found' });
             }

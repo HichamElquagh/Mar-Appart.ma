@@ -174,9 +174,9 @@ const ApartmentModal = ( {
     // if(apartmentData.images.length === 0) {     
 
     // }
-    if (!validate()) {
-      return;
-    }
+    // if (!validate()) {
+    //   return;
+    // }
     const urls = await handleImageSubmit();
     // console.log('Image URLs:', urls);
     try {

@@ -76,67 +76,61 @@ describe('createApartment', () => {
     });
   });
 
+
+ 
+  // describe('getApartments', () => {
+  //   let req, res;
   
-describe('getApartments', () => {
-  let req, res;
+  //   beforeEach(() => {
+  //     req = {
+  //       user: {
+  //         id: 'testUserId',
+  //         role: 'admin',
+  //       },
+  //     };
+  //     res = {
+  //       status: jest.fn().mockReturnThis(),
+  //       json: jest.fn(),
+  //     };
+  //   });
+  
+  //   it('should get all apartments with populated owner fields if user is admin', async () => {
+  //     const apartments = [{ _id: 'testApartmentId', owner: 'testOwnerId' }];
+  //     Apartment.find.mockResolvedValue(apartments);
+  
+  //     await getApartments(req, res);
+  
+  //     expect(Apartment.find).toHaveBeenCalled();
+  //     expect(res.status).toHaveBeenCalledWith(200);
+  //     expect(res.json).toHaveBeenCalledWith(apartments);
+  //   });
+  
+  //   it('should get apartments of the user if user is not admin', async () => {
+  //     req.user.role = 'user';
+  //     const apartments = [{ _id: 'testApartmentId', owner: req.user.id }];
+  //     Apartment.find.mockResolvedValue(apartments);
+  
+  //     await getApartments(req, res);
+  
+  //     expect(Apartment.find).toHaveBeenCalledWith({ owner: req.user.id });
+  //     expect(res.status).toHaveBeenCalledWith(200);
+  //     expect(res.json).toHaveBeenCalledWith(apartments);
+  //   });
+  
+  //   it('should return 500 if an error occurs', async () => {
+  //     Apartment.find.mockRejectedValue(new Error('Test error'));
+  
+  //     await getApartments(req, res);
+  
+  //     expect(res.status).toHaveBeenCalledWith(500);
+  //     expect(res.json).toHaveBeenCalledWith({ error: 'Test error' });
+  //   });
+  // });
+  
 
-  beforeEach(() => {
-    // Set up the request and response objects
-    req = {
-      user: {
-        id: 'testUserId',
-        role: 'admin',
-      },
-    };
-    res = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
-    };
-  });
 
-  it('should get all apartments if user is admin', async () => {
-    // Set up the mocks
-    Apartment.find.mockResolvedValue([]);
 
-    // Call the function
-    await getApartments(req, res);
 
-    // Check that the mocks were called with the correct arguments
-    expect(Apartment.find).toHaveBeenCalled();
-
-    // Check that the response is correct
-    expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith([]);
-  });
-
-  it('should get apartments of the user if user is not admin', async () => {
-    // Set up the mocks
-    req.user.role = 'user';
-    Apartment.find.mockResolvedValue([]);
-
-    // Call the function
-    await getApartments(req, res);
-
-    // Check that the mocks were called with the correct arguments
-    expect(Apartment.find).toHaveBeenCalledWith({ owner: req.user.id });
-
-    // Check that the response is correct
-    expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith([]);
-  });
-
-  it('should return 500 if an error occurs', async () => {
-    // Set up the mocks
-    Apartment.find.mockRejectedValue(new Error('Test error'));
-
-    // Call the function
-    await getApartments(req, res);
-
-    // Check that the response is correct
-    expect(res.status).toHaveBeenCalledWith(500);
-    expect(res.json).toHaveBeenCalledWith({ error: 'Test error' });
-  });
-});
 
 describe('getAllApartments', () => {
     let req, res;

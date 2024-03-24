@@ -1,4 +1,4 @@
-import React from "react";
+import React ,{useEffect} from "react";
 import DashCard from "../dash/DashCard";
 import {useGetUsersQuery , useUpdateUserMutation ,useDeleteUserMutation} from "../../store/api/userQuery";
 import toast from "react-hot-toast";
@@ -14,19 +14,29 @@ const UserTable = () => {
         refetch();
         toast.success('User deleted successfully');
     }
-
-    const [updateUser] = useUpdateUserMutation();
-
-    const handleChange = async (e) => {
-        const { name, value } = e.target;
-
-        await updateUser({[name]: value });
-        refetch();
-        toast.success('User role updated successfully');
-    }
-
     
+    const [updateUser , { 
+        error: updateError,
+        isLoading: isUpdateLoading
 
+     }] = useUpdateUserMutation();
+
+     
+     useEffect(() => {
+        if(updateError){
+            toast.error(updateError.data.error);
+        }
+    }, [updateError]);
+
+    const handleChange = async (id) => {
+        try {
+            await updateUser({userId: id, role: 'admin'});
+            refetch();
+            toast.success('User role updated successfully');
+        } catch (error) {
+            console.error(error);
+        }
+    }
     
     
     return (
@@ -130,9 +140,9 @@ const UserTable = () => {
                   <div className="px-6 py-3">
                     <select  name="role"
                     value={user.role}
-                    onChange={handleChange}
+                    onChange={()=>handleChange(user._id)}
 
-                    className="block w-full py-2 px-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:border-gray-700 dark:focus:ring-gray-600 dark:focus:border-gray-600"
+                    className="block w-full py-2 px-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:border-gray-700 dark:focus:ring-gray-600 dark:focus:border-gray-600 "
                     >
                       <option value="admin">Admin</option>
                       <option value="user">User</option>

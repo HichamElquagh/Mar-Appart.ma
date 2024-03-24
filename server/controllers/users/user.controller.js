@@ -37,13 +37,13 @@ class UserController {
    
 
     async updateUser(req, res) {
-        const user_id = req.user.id
-        const { role } = req.body
-        console.log('role',role)
-        return
+        
+        const {userId, role } = req.body
+     
         
         try {
-                const updatedUser = await User.findByIdAndUpdate(user_id,{ role }, { new: true })
+                const updatedUser = await User.findByIdAndUpdate(userId,{ role }, { new: true })
+                console.log(updatedUser)
                 res.status(200).json({ message: 'User updated successfully', updatedUser })
                 
             

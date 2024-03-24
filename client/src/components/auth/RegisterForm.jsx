@@ -148,7 +148,7 @@ const Registerform = () => {
               </button>
             </form>
             <hr className="my-4 border-gray-300 w-full" />
-            <button
+            {/* <button
               type="button"
               className="w-full block bg-white hover:bg-gray-100 focus:bg-gray-100 text-gray-900 font-semibold rounded-lg px-4 py-3 border border-gray-300"
             >
@@ -159,7 +159,7 @@ const Registerform = () => {
                 />
                 <span className="ml-4">Log in with Google</span>
               </div>
-            </button>
+            </button> */}
             <p className="my-4">
               Need an account?{" "}
               <a

@@ -25,14 +25,13 @@ export default function ApartmentsTable () {
   console.log("hhhhhhh",showModalForUpdate)
 
   const { data: apartments, error, isLoading, refetch } = useGetApartmentsQuery();
+  
   useEffect(() => { 
     refetch();
   }, [showModal, showModalForUpdate]);
 
   const [deleteApartment] = useDeleteApartmentMutation();
-  console.log(apartments)
-  if (isLoading) return 'Loading...';
-  if (error) return `Error! ${error.message}`;
+
 
 
 const handleDelete = async (id) => {
@@ -47,12 +46,16 @@ const handleDelete = async (id) => {
   
 }
 
- // Logic for pagination
- const indexOfLastItem = currentPage * itemsPerPage;
- const indexOfFirstItem = indexOfLastItem - itemsPerPage;
- const currentItems = apartments.slice(indexOfFirstItem, indexOfLastItem);
+  if(apartments === undefined) {
+    return <Box>Loading...</Box>
+  }
+  
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = apartments.slice(indexOfFirstItem, indexOfLastItem);
+ 
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
- const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   
   return (  
@@ -154,6 +157,13 @@ const handleDelete = async (id) => {
                         <th scope="col" className="px-6 py-3 text-start">
                           <div className="flex items-center gap-x-2">
                             <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
+                              Owner
+                            </span>
+                          </div>
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-start">
+                          <div className="flex items-center gap-x-2">
+                            <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
                               Details
                             </span>
                           </div>
@@ -199,7 +209,9 @@ const handleDelete = async (id) => {
                         </td>
                         <td className="size-px whitespace-nowrap">
                           <div className="text-xs px-6 py-3">
-                            <span className="block text-sm font-semibold text-gray-800 dark:text-gray-200">{apartment.description}</span>
+                            <span className="block text-sm font-semibold text-gray-800 dark:text-gray-200" style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                              {apartment.description}
+                            </span>
                           </div>
                         </td>
                         <td className="size-px whitespace-nowrap">
@@ -221,6 +233,16 @@ const handleDelete = async (id) => {
                             </ul>
                           </div>
                         </td>
+                        <td className="size-px whitespace-nowrap">
+
+                          <div className=" py-3">
+                            <img src={apartment.owner.image} className="inline-block size-[30px] rounded-full" alt="" />
+                            <span className=" ms-3 inline-block text-sm font-semibold text-gray-800 dark:text-gray-200">{apartment.owner.username}</span>
+                          </div>
+                          <span className="inline-block   text-x font-semibold text-gray-800 dark:text-gray-200 ">                          &#9990; 
+ : {apartment.owner.phone}</span>
+                        </td>
+
                         <td className="size-px whitespace-nowrap">
                           <div className="px-6 py-1.5">
                             <button

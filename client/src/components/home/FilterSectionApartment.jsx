@@ -18,7 +18,7 @@ const FilterSectionApartment = ({FilterData}) => {
             setApartments(FilterResults);
         }
         if (searchError) {
-          toast.error(searchError.data.error);
+          setApartments([]);
         }
     }
 

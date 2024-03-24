@@ -3,13 +3,15 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin!
 import interactionPlugin from '@fullcalendar/interaction'; // for event click handling
 
-import { useGetReservationsQuery } from '../../store/api/reservationQuery';
+import { useGetReservationsQuery , useDeleteReservationMutation } from '../../store/api/reservationQuery';
 
 export default function Calendar() {
-  const { data: reservations, error, isLoading, isError } = useGetReservationsQuery();
+  const { data: reservations, error, isLoading, isError , refetch } = useGetReservationsQuery();
+  const [deleteReservation] = useDeleteReservationMutation();
 
   const [events, setEvents] = useState([]); // Use state for reactive event updates
   const [selectedEvent, setSelectedEvent] = useState(null); // Track selected event
+  console.log("reservations",reservations)
 
   useEffect(() => {
     if (reservations) {
@@ -20,6 +22,8 @@ export default function Calendar() {
         className: reservation.status === "Reserved" ? "bg-green-500" : "bg-red-500",
         // Add a custom property to store reservation details for modal
         reservationDetails: reservation,
+        apartment: reservation.apartment
+
       }));
       setEvents(formattedEvents);
     }
@@ -32,8 +36,12 @@ export default function Calendar() {
     handleShowModal(); // Show modal on event click
   };
   const handleDeleteReservation = () => {
-    console.log("Delete Reservation")
     console.log(selectedEvent.extendedProps.reservationDetails._id)
+    deleteReservation(selectedEvent.extendedProps.reservationDetails._id);
+    handleCloseModal();
+    refetch();
+
+
 
   }
 
@@ -88,6 +96,19 @@ export default function Calendar() {
             </a>
           </div>
         </div>
+        <div className="flex flex-col items-start gap-2">
+  <p className="text-xl font-medium text-gray-700">Apartment Details:</p>
+  {/* <img
+    className="h-56 rounded-lg object-cover"
+    src={selectedEvent.extendedProps.apartment.images[0]}
+    alt=""
+  /> */}
+  <p className="text-sm font-medium text-gray-900">Name: {selectedEvent.extendedProps.apartment.name}</p>
+  <p className="text-sm font-medium text-gray-900">City: {selectedEvent.extendedProps.apartment.city}</p>
+  <p className="text-sm font-medium text-gray-900">Price: {selectedEvent.extendedProps.apartment.price + " dh"} </p>
+  <p className="text-sm font-medium text-gray-900">Location: {selectedEvent.extendedProps.apartment.address}</p>
+
+</div>
         <div className="flex justify-between  mt-5">
           <button
             type="button"
@@ -98,7 +119,7 @@ export default function Calendar() {
           </button>
           <button
             type="button"
-            className="inline-flex items-center px-3 py-2 bg-gray-800 text-white rounded-lg hover:bg-opacity-70 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            className="ms-3 inline-flex items-center px-3 py-2 bg-gray-800 text-white rounded-lg hover:bg-opacity-70 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             onClick={handleCloseModal}
           >
             Close

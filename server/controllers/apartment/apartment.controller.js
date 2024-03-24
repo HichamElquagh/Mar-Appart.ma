@@ -48,7 +48,7 @@ const Apartment = require('../../models/apartment')
      async getApartments(req, res) {
         if(req.user.role === 'admin'){
             try {
-                const apartments = await Apartment.find();
+                const apartments = await Apartment.find().populate('owner', 'username email phone image');
                 // console.log(apartments)
                 res.status(200).json(apartments);
             } catch (error) {

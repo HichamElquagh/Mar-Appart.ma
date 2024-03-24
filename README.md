@@ -9,11 +9,11 @@ MarAppart est une plateforme dédiée à la location d'appartements au Maroc. L'
 
 ### Page d'Accueil
 
-![Page d'Accueil]()
+![Page d'Accueil](https://github.com/HichamElquagh/Mar-Appart.ma/blob/main/client/src/assets/image1.png)
 
 ### Page de Filtre
 
-![Page de Filtre]()
+![Page de Filtre](https://github.com/HichamElquagh/Mar-Appart.ma/blob/main/client/src/assets/image.png)
 
 ## Objectifs du Projet
 

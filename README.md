@@ -22,22 +22,6 @@ MarAppart est une plateforme dédiée à la location d'appartements au Maroc. L'
 3. **Optimiser le temps de recherche** en offrant une expérience efficace et rapide.
 4. **Créer une réputation solide sur le marché** et étendre les services pour satisfaire les besoins des clients.
 
-## Public Cible
-
-MarAppart cible les personnes à la recherche d'une location au Maroc, qu'elles soient résidentes, étrangères ou touristes.
-
-## Objectifs Quantitatifs après 1 An
-
-1. Établir une réputation solide sur le marché.
-2. Ajouter plusieurs services au site pour répondre à tous les besoins des clients.
-
-## Périmètre du Projet
-
-- L'activité vise uniquement le Maroc.
-- Le site sera disponible exclusivement au Maroc.
-- Le site sera entièrement **Responsive Design**.
-- Toutes les fonctionnalités seront accessibles depuis un mobile.
-
 ## Description Fonctionnelle et Technique
 
 ### Arborescence du Site
@@ -87,7 +71,7 @@ MarAppart cible les personnes à la recherche d'une location au Maroc, qu'elles 
 
 #### Base de Données
 
-- MySQL or MongoDB
+- MongoDB
 
 #### Architecture du Projet
 
